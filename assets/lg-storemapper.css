@@ -1,0 +1,661 @@
+/* LG Store Mapper Stylesheet */
+
+:root {
+    --lg-red: #e50020;
+    --lg-red-hover: #b80018;
+    --lg-dark: #333333;
+    --lg-gray-light: #f4f2eb;
+    --lg-text-muted: #666666;
+    --lg-border-color: #d1d1d1;
+    --lg-card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --lg-transition-speed: 0.3s;
+}
+
+/* Base Wrapper styling */
+.storemapper-section {
+    padding: 40px 20px;
+    max-width: 1280px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--lg-dark);
+}
+
+.storemapper-header {
+    margin-bottom: 24px;
+}
+
+.storemapper-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--lg-dark);
+}
+
+.storemapper-subtitle {
+    font-size: 16px;
+    color: var(--lg-text-muted);
+    margin: 0;
+}
+
+/* Filter Card */
+.storemapper-filter-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px 30px;
+    box-shadow: var(--lg-card-shadow);
+    margin-bottom: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.storemapper-filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.storemapper-filter-group {
+    flex: 1 1 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative; /* needed for autocomplete relative positioning */
+}
+
+.storemapper-filter-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--lg-dark);
+    display: flex;
+    align-items: center;
+}
+
+.storemapper-filter-group label .required-asterisk {
+    color: var(--lg-red);
+    margin-left: 3px;
+}
+
+/* Input Fields & Dropdowns - Pill Styled */
+.storemapper-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.storemapper-select,
+.storemapper-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 20px;
+    border: 1px solid var(--lg-border-color);
+    border-radius: 24px;
+    font-size: 14px;
+    color: var(--lg-dark);
+    background-color: #ffffff;
+    outline: none;
+    transition: border-color var(--lg-transition-speed) ease, box-shadow var(--lg-transition-speed) ease;
+    box-sizing: border-box;
+}
+
+.storemapper-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 40px;
+}
+
+.storemapper-input-wrapper::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    width: 10px;
+    height: 6px;
+    transform: translateY(-50%);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%23333333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+}
+
+/* Disable default caret for inputs */
+.storemapper-input-wrapper-search::after {
+    display: none;
+}
+
+.storemapper-select:focus,
+.storemapper-input:focus {
+    border-color: var(--lg-red);
+    box-shadow: 0 0 0 3px rgba(229, 0, 32, 0.1);
+}
+
+/* Search Button */
+.storemapper-search-button {
+    height: 48px;
+    padding: 0 35px;
+    border: none;
+    border-radius: 24px;
+    background-color: var(--lg-red);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--lg-transition-speed) ease, transform 0.1s ease, box-shadow var(--lg-transition-speed) ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.storemapper-search-button:hover {
+    background-color: var(--lg-red-hover);
+    box-shadow: 0 4px 12px rgba(229, 0, 32, 0.2);
+}
+
+.storemapper-search-button:active {
+    transform: scale(0.97);
+}
+
+/* Autocomplete Suggestions Dropdown */
+.storemapper-suggestions-container {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid var(--lg-border-color);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1100;
+    overflow: hidden;
+    display: none;
+    box-sizing: border-box;
+}
+
+.storemapper-suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.storemapper-suggestion-item:last-of-type {
+    border-bottom: none;
+}
+
+.storemapper-suggestion-item:hover {
+    background-color: #faf9f6;
+}
+
+.storemapper-suggestion-icon {
+    width: 14px;
+    height: 14px;
+    color: #999999;
+    flex-shrink: 0;
+}
+
+.storemapper-suggestion-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--lg-dark);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.storemapper-suggestion-main {
+    font-weight: 700;
+    color: var(--lg-dark);
+}
+
+.storemapper-suggestion-secondary {
+    color: var(--lg-text-muted);
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+.storemapper-suggestions-footer {
+    padding: 6px 16px;
+    background: #fafafa;
+    text-align: right;
+    font-size: 10px;
+    color: #999999;
+    border-top: 1px solid #f2f2f2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+}
+
+.storemapper-suggestions-footer svg {
+    height: 10px;
+}
+
+/* Map Container Layout */
+.storemapper-layout {
+    display: flex;
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--lg-card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    height: 650px;
+    position: relative;
+}
+
+/* Sidebar Styling */
+.storemapper-sidebar {
+    width: 380px;
+    min-width: 380px;
+    background: #ffffff;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
+    transition: margin-left var(--lg-transition-speed) ease;
+}
+
+.storemapper-sidebar.is-collapsed {
+    margin-left: -380px;
+}
+
+.storemapper-sidebar-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+}
+
+.storemapper-results-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--lg-text-muted);
+}
+
+/* Sidebar Toggle Arrow */
+.storemapper-sidebar-toggle {
+    position: absolute;
+    top: 15px;
+    right: -24px;
+    width: 24px;
+    height: 32px;
+    background: #333333;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    z-index: 100;
+    border: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    transition: background var(--lg-transition-speed) ease;
+}
+
+.storemapper-sidebar-toggle:hover {
+    background: var(--lg-red);
+}
+
+.storemapper-sidebar-toggle svg {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--lg-transition-speed) ease;
+}
+
+.storemapper-sidebar.is-collapsed .storemapper-sidebar-toggle svg {
+    transform: rotate(180deg);
+}
+
+/* Store List styling */
+.storemapper-store-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for list */
+.storemapper-store-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.storemapper-store-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.storemapper-store-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+.storemapper-store-list::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* List Item styling */
+.storemapper-store-item {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background-color var(--lg-transition-speed) ease, border-left var(--lg-transition-speed) ease;
+    display: flex;
+    gap: 15px;
+    border-left: 4px solid transparent;
+}
+
+.storemapper-store-item:hover {
+    background-color: #faf9f6;
+}
+
+.storemapper-store-item.is-active {
+    background-color: #f7f5ef;
+    border-left-color: var(--lg-red);
+}
+
+/* Pin/Number indicators */
+.store-marker-pin-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.store-marker-number-pin {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.store-marker-number-pin svg {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.store-marker-number-pin span {
+    font-size: 11px;
+    font-weight: bold;
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
+    margin-top: -3px; /* visual adjust for map pin bulb shape */
+}
+
+/* Custom mini icon next to title */
+.store-type-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--lg-text-muted);
+}
+
+/* Store details typography */
+.store-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.store-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.store-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--lg-dark);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.store-address {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--lg-text-muted);
+    margin: 0;
+}
+
+.store-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--lg-text-muted);
+    text-decoration: none;
+    margin-top: 2px;
+    transition: color 0.2s ease;
+}
+
+.store-contact-row:hover {
+    color: var(--lg-red);
+}
+
+.store-contact-row svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* Map area */
+.storemapper-map-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+}
+
+.storemapper-map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Leaflet Overrides */
+.leaflet-container {
+    font-family: inherit !important;
+}
+
+/* Custom Infowindow (Leaflet Popup) Styles */
+.storemapper-map .leaflet-popup-content-wrapper {
+    border-radius: 16px;
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.storemapper-map .leaflet-popup-content {
+    margin: 0 !important;
+    width: 280px !important;
+}
+
+.storemapper-map .leaflet-popup-close-button {
+    top: 12px !important;
+    right: 12px !important;
+    color: #999999 !important;
+    font-size: 18px !important;
+    z-index: 10;
+}
+
+.storemapper-map .leaflet-popup-close-button:hover {
+    color: var(--lg-dark) !important;
+    background: transparent !important;
+}
+
+/* Custom Popup Content HTML */
+.map-popup-card {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #ffffff;
+}
+
+.map-popup-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+}
+
+.map-popup-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--lg-dark);
+    margin: 0;
+}
+
+.map-popup-address {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--lg-text-muted);
+    margin: 0;
+}
+
+/* Leaflet control custom button styles */
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+    background-color: #ffffff !important;
+    color: var(--lg-dark) !important;
+    border: none !important;
+    transition: background-color 0.2s;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+    background-color: #f4f4f4 !important;
+}
+
+/* Fullscreen control custom layout */
+.map-fullscreen-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+    width: 34px;
+    height: 34px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--lg-dark);
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.map-fullscreen-btn:hover {
+    background-color: #f4f4f4;
+}
+
+.map-fullscreen-btn:active {
+    transform: scale(0.95);
+}
+
+.map-fullscreen-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Empty State / Not Found State */
+.storemapper-empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--lg-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 100%;
+}
+
+.storemapper-empty-state svg {
+    width: 48px;
+    height: 48px;
+    color: var(--lg-border-color);
+}
+
+.storemapper-empty-state p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Responsive Overrides */
+@media (max-width: 991px) {
+    .storemapper-filter-card {
+        padding: 20px;
+    }
+    
+    .storemapper-layout {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .storemapper-sidebar {
+        width: 100%;
+        min-width: auto;
+        height: 350px;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    .storemapper-sidebar.is-collapsed {
+        margin-left: 0;
+        height: 0;
+        overflow: hidden;
+    }
+    
+    .storemapper-sidebar-toggle {
+        display: none; /* Hide collapse button on mobile as layout is stacked */
+    }
+    
+    .storemapper-map-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 576px) {
+    .storemapper-filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .storemapper-filter-group {
+        flex: 1 1 auto;
+    }
+    
+    .storemapper-search-button {
+        width: 100%;
+    }
+    
+    .storemapper-title {
+        font-size: 26px;
+    }
+}

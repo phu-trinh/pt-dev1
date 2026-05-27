@@ -1,0 +1,512 @@
+<!-- Leaflet Map CSS dependency -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<!-- Leaflet Map JS dependency -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+{{ 'lg-storemapper.css' | asset_url | stylesheet_tag }}
+<script
+  src="{{ 'lg-storemapper.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{%- comment -%} Extract Unique Business Units and Countries dynamically from blocks for filters {%- endcomment -%}
+{%- assign unique_countries = "" -%}
+{%- assign unique_bus = "" -%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == 'store' -%}
+    {%- assign country = block.settings.country | strip -%}
+    {%- assign bu = block.settings.business_unit | strip -%}
+    
+    {%- if country != "" -%}
+      {%- assign country_check = country | downcase -%}
+      {%- assign unique_countries_downcase = unique_countries | downcase -%}
+      {%- unless unique_countries_downcase contains country_check -%}
+        {%- if unique_countries != "" -%}{%- assign unique_countries = unique_countries | append: "||" -%}{%- endif -%}
+        {%- assign unique_countries = unique_countries | append: country -%}
+      {%- endunless -%}
+    {%- endif -%}
+
+    {%- if bu != "" -%}
+      {%- assign bu_check = bu | downcase -%}
+      {%- assign unique_bus_downcase = unique_bus | downcase -%}
+      {%- unless unique_bus_downcase contains bu_check -%}
+        {%- if unique_bus != "" -%}{%- assign unique_bus = unique_bus | append: "||" -%}{%- endif -%}
+        {%- assign unique_bus = unique_bus | append: bu -%}
+      {%- endunless -%}
+    {%- endif -%}
+  {%- endif -%}{%- endfor -%}
+
+{%- assign country_arr = unique_countries | split: "||" | sort -%}
+{%- assign bu_arr = unique_bus | split: "||" | sort -%}
+
+<section 
+  class="storemapper-section" 
+  id="storemapper-{{ section.id }}" 
+  aria-labelledby="storemapper-title-{{ section.id }}"
+  data-google-api-key="{{ section.settings.google_maps_api_key | escape }}"
+>
+  <div class="storemapper-header">
+    <h1 class="storemapper-title" id="storemapper-title-{{ section.id }}">{{ section.settings.title }}</h1>
+    <p class="storemapper-subtitle">{{ section.settings.subtitle }}</p>
+  </div>
+
+  <!-- Filter Selector Card -->
+  <div class="storemapper-filter-card">
+    <form class="storemapper-filter-form" autocomplete="off" onsubmit="return false;">
+      
+      <!-- Business Unit Select -->
+      <div class="storemapper-filter-group">
+        <label for="business-unit-select">
+          {{ section.settings.bu_label }}
+          <span class="required-asterisk" aria-hidden="true">*</span>
+        </label>
+        <div class="storemapper-input-wrapper">
+          <select id="business-unit-select" class="storemapper-select" required>
+            <option value="">{{ section.settings.bu_placeholder }}</option>
+            {%- for bu in bu_arr -%}
+              <option value="{{ bu }}">{{ bu }}</option>
+            {%- endfor -%}
+          </select>
+        </div>
+      </div>
+
+      <!-- Country Select -->
+      <div class="storemapper-filter-group">
+        <label for="country-select">
+          {{ section.settings.country_label }}
+          <span class="required-asterisk" aria-hidden="true">*</span>
+        </label>
+        <div class="storemapper-input-wrapper">
+          <select id="country-select" class="storemapper-select" required>
+            <option value="">{{ section.settings.country_placeholder }}</option>
+            {%- comment -%} Countries are generated dynamically by JS relative to selected Business Unit {%- endcomment -%}
+            {%- for country in country_arr -%}
+              <option value="{{ country }}">{{ country }}</option>
+            {%- endfor -%}
+          </select>
+        </div>
+      </div>
+
+      <!-- Address Input -->
+      <div class="storemapper-filter-group">
+        <label for="address-search-input">
+          {{ section.settings.search_label }}
+          <span class="required-asterisk" aria-hidden="true">*</span>
+        </label>
+        <div class="storemapper-input-wrapper storemapper-input-wrapper-search">
+          <input 
+            type="text" 
+            id="address-search-input" 
+            class="storemapper-input" 
+            placeholder="{{ section.settings.search_placeholder }}"
+            required
+          />
+        </div>
+
+        <!-- Suggestion list container -->
+        <div class="storemapper-suggestions-container" id="address-suggestions-box"></div>
+      </div>
+
+      <!-- Search Button -->
+      <button type="submit" class="storemapper-search-button">
+        {{ section.settings.search_btn_text }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Interactive Map & List Layout -->
+  <div class="storemapper-layout">
+    
+    <!-- Collapsible Sidebar -->
+    <aside class="storemapper-sidebar" aria-label="Store locations sidebar">
+      <!-- Collapse toggle button -->
+      <button class="storemapper-sidebar-toggle" aria-label="Toggle store list panel" aria-expanded="true">
+        <svg viewBox="0 0 10 10">
+          <path d="M7 1L3 5l4 4" />
+        </svg>
+      </button>
+
+      <div class="storemapper-sidebar-header">
+        <span class="storemapper-results-count">
+          <span class="storemapper-results-count-number">0</span> Results Found
+        </span>
+      </div>
+
+      <div class="storemapper-store-list">
+        {%- assign counter = 1 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'store' -%}
+            <div 
+              class="storemapper-store-item" 
+              data-id="{{ block.id }}"
+              data-name="{{ block.settings.name | escape }}"
+              data-business-unit="{{ block.settings.business_unit | escape }}"
+              data-country="{{ block.settings.country | escape }}"
+              data-address="{{ block.settings.address | escape }}"
+              data-lat="{{ block.settings.latitude | escape }}"
+              data-lng="{{ block.settings.longitude | escape }}"
+              data-phone="{{ block.settings.phone | escape }}"
+              data-email="{{ block.settings.email | escape }}"
+              role="button"
+              tabindex="0"
+            >
+              <div class="store-marker-pin-wrapper">
+                <div class="store-marker-number-pin">
+                  <svg viewBox="0 0 24 30" width="24" height="30">
+                    <path fill="#e50020" d="M12,0 C5.37,0 0,5.37 0,12 C0,21 12,30 12,30 C12,30 24,21 24,12 C24,5.37 18.63,0 12,0 Z" />
+                    <circle fill="#ffffff" cx="12" cy="11" r="7" />
+                  </svg>
+                  <span>{{ counter }}</span>
+                </div>
+              </div>
+              
+              <div class="store-details">
+                <div class="store-title-row">
+                  <!-- Office/Branch Outline Icon -->
+                  <svg class="store-type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <h2 class="store-name">{{ block.settings.name }}</h2>
+                </div>
+                <address class="store-address">{{ block.settings.address }}</address>
+                {%- if block.settings.phone != blank -%}
+                  <a href="tel:{{ block.settings.phone }}" class="store-contact-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <span>{{ block.settings.phone }}</span>
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.email != blank -%}
+                  <a href="mailto:{{ block.settings.email }}" class="store-contact-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="20" height="16" x="2" y="4" rx="2"/>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                    <span>{{ block.settings.email }}</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+            {%- assign counter = counter | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </aside>
+
+    <!-- Map Canvas -->
+    <div class="storemapper-map-container">
+      <button class="map-fullscreen-btn" aria-label="Toggle fullscreen map view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
+      <div class="storemapper-map"></div>
+
+      <!-- No Results / Empty State -->
+      <div class="storemapper-empty-state" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <p>No locations found matching your filter options.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Store Mapper",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "class": "lg-storemapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Where to Buy"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Connect with LG compressor and motor's worldwide sales networks"
+    },
+    {
+      "type": "text",
+      "id": "bu_label",
+      "label": "Business Unit Label",
+      "default": "Business Unit"
+    },
+    {
+      "type": "text",
+      "id": "bu_placeholder",
+      "label": "Business Unit Default Option",
+      "default": "Select Business Unit"
+    },
+    {
+      "type": "text",
+      "id": "country_label",
+      "label": "Country Label",
+      "default": "Country"
+    },
+    {
+      "type": "text",
+      "id": "country_placeholder",
+      "label": "Country Default Option",
+      "default": "Select Country"
+    },
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search Input Label",
+      "default": "Search by Address"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search Input Placeholder",
+      "default": "Enter your address"
+    },
+    {
+      "type": "text",
+      "id": "search_btn_text",
+      "label": "Search Button Text",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "google_maps_api_key",
+      "label": "Google Maps API Key (Optional)",
+      "info": "Provide an API key to enable Google Places Autocomplete. If left blank, a free OpenStreetMap-based autocomplete is used."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "Store Location",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Store Name",
+          "default": "GCA"
+        },
+        {
+          "type": "text",
+          "id": "business_unit",
+          "label": "Business Unit",
+          "default": "Compressor & Motor"
+        },
+        {
+          "type": "text",
+          "id": "country",
+          "label": "Country",
+          "default": "South Korea"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address",
+          "default": "331, Dongmak-ro, Mapo-gu, Seoul, Republic of Korea"
+        },
+        {
+          "type": "text",
+          "id": "latitude",
+          "label": "Latitude (Decimal)",
+          "default": "37.5450"
+        },
+        {
+          "type": "text",
+          "id": "longitude",
+          "label": "Longitude (Decimal)",
+          "default": "126.9240"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone Number",
+          "default": "+82-2-3275-5115"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email Address"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store Mapper",
+      "blocks": [
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor China",
+            "business_unit": "Compressor & Motor",
+            "country": "China",
+            "address": "No. 2, North Third Ring Road East, Chaoyang District, Beijing, China",
+            "latitude": "39.9678",
+            "longitude": "116.4215",
+            "phone": "+86-10-6468-1234",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor India",
+            "business_unit": "Compressor & Motor",
+            "country": "India",
+            "address": "Plot No. 51, Udyog Vihar, Greater Noida, Uttar Pradesh, India",
+            "latitude": "28.5276",
+            "longitude": "77.5135",
+            "phone": "+91-120-256-0900",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor Italy",
+            "business_unit": "Compressor & Motor",
+            "country": "Italy",
+            "address": "Via Aldo Rossi 4, 20149 Milano MI, Italy",
+            "latitude": "45.4891",
+            "longitude": "9.1415",
+            "phone": "+39-02-5180-11",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "GCA",
+            "business_unit": "Compressor & Motor",
+            "country": "South Korea",
+            "address": "331, Dongmak-ro, Mapo-gu, Seoul, Republic of Korea",
+            "latitude": "37.5450",
+            "longitude": "126.9240",
+            "phone": "+82-2-3275-5115",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "GS. Inc",
+            "business_unit": "Compressor & Motor",
+            "country": "South Korea",
+            "address": "Oncheon-ro, Paltan-myeon, Hwaseong-si, Gyeonggi-do, Korea",
+            "latitude": "37.1650",
+            "longitude": "126.9060",
+            "phone": "+82-31-8059-6815",
+            "email": "gs0871@gskorea.net"
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "Hansung",
+            "business_unit": "Compressor & Motor",
+            "country": "South Korea",
+            "address": "28, Gwangmyeong-ro 676beon-gil, Gwangmyeong-si, Gyeonggi-do, Republic of Korea",
+            "latitude": "37.4780",
+            "longitude": "126.8550",
+            "phone": "+82-10-6221-8694",
+            "email": "hs@hansungcomp.com"
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor Lebanon",
+            "business_unit": "Compressor & Motor",
+            "country": "Lebanon",
+            "address": "LG Building, Dbayeh Highway, Beirut, Lebanon",
+            "latitude": "33.9189",
+            "longitude": "35.5684",
+            "phone": "+961-4-548-123",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor Thailand",
+            "business_unit": "Compressor & Motor",
+            "country": "Thailand",
+            "address": "72/1-5 Rama 9 Rd, Huai Khwang, Bangkok 10310, Thailand",
+            "latitude": "13.7542",
+            "longitude": "100.5678",
+            "phone": "+66-2-878-3000",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor Türkiye",
+            "business_unit": "Compressor & Motor",
+            "country": "Türkiye",
+            "address": "Kaptanpasa Mah. Piyalepasa Bulvari No:73 Ortadogu Plaza Kat:18 Sisli, Istanbul, Turkey",
+            "latitude": "41.0594",
+            "longitude": "28.9664",
+            "phone": "+90-212-314-5252",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor USA",
+            "business_unit": "Compressor & Motor",
+            "country": "United States",
+            "address": "111 Sylvan Ave, Englewood Cliffs, NJ 07632, United States",
+            "latitude": "40.8841",
+            "longitude": "-73.9452",
+            "phone": "+1-201-816-2000",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Compressor Vietnam",
+            "business_unit": "Compressor & Motor",
+            "country": "Vietnam",
+            "address": "35th Floor, Keangnam Hanoi Landmark Tower, Pham Hung Road, Nam Tu Liem District, Hanoi, Vietnam",
+            "latitude": "21.0168",
+            "longitude": "105.7839",
+            "phone": "+84-24-3934-5151",
+            "email": ""
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+            "name": "LG Air Solution Germany",
+            "business_unit": "Air Solution",
+            "country": "Germany",
+            "address": "Alfred-Herrhausen-Allee 3-5, 65760 Eschborn, Germany",
+            "latitude": "50.1415",
+            "longitude": "8.5684",
+            "phone": "+49-6196-5821-0",
+            "email": "air-solution@lg.de"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
