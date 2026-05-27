@@ -24,6 +24,10 @@
   {% content_for 'blocks' %}
 {% endcapture %}
 
+<div class="hidden data-product-info"
+  data-product-info="{{ product | json | escape }}"
+></div>
+
 {% if section.settings.enable_sticky_add_to_cart %}
   {% liquid
     assign current_variant = product.selected_or_first_available_variant
