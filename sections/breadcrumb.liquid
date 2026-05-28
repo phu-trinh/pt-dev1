@@ -1,5 +1,5 @@
 {% liquid
-  assign breadcrumb_collection = product.url | within: collection
+  assign breadcrumb_collection = collection
 
   if breadcrumb_collection == blank
     assign primary_collection = product.metafields.custom.primary_collection.value
