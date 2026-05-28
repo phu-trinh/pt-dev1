@@ -24,10 +24,12 @@
         <a href="{{ routes.root_url }}">Home</a>
         <span>/</span>
         {% if breadcrumb_collection != blank %}
-            <a href="{{ breadcrumb_collection.url }}">{{ breadcrumb_collection.title }}</a>
-            <span>/</span>
+        <a href="{{ breadcrumb_collection.url }}">{{ breadcrumb_collection.title }}</a>        
         {% endif %}
+        {% if template == 'product' %}
+        <span>/</span>
         <span>{{ product.title }}</span>
+        {% endif %}
     </nav>
 </div>
 {% endif %}
