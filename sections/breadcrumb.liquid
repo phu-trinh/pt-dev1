@@ -1,5 +1,35 @@
+{% liquid
+  assign breadcrumb_collection = collection
+
+  if breadcrumb_collection == blank
+    assign primary_collection = product.metafields.custom.primary_collection.value
+    if primary_collection != blank
+      assign breadcrumb_collection = primary_collection
+    endif
+  endif
+
+  if breadcrumb_collection == blank
+    for item_collection in product.collections
+      unless item_collection.handle == 'all' or item_collection.handle == 'frontpage'
+        assign breadcrumb_collection = item_collection
+        break
+      endunless
+    endfor
+  endif
+%}
+
 <div class="breadcrumb-section page-width">
-    
+    <nav class="breadcrumb">
+    <a href="{{ routes.root_url }}">Home</a>
+    <span>›</span>
+
+    {% if breadcrumb_collection != blank %}
+        <a href="{{ breadcrumb_collection.url }}">{{ breadcrumb_collection.title }}</a>
+        <span>›</span>
+    {% endif %}
+
+    <span>{{ product.title }}</span>
+    </nav>
 </div>
 
 {% schema %}
