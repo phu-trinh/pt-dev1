@@ -6,8 +6,14 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
+    "breadcrumb_B7icVb": {
+      "type": "breadcrumb",
+      "name": "Breadcrumb",
+      "settings": {}
+    },
     "section": {
       "type": "section",
       "blocks": {
@@ -214,6 +220,8 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
+        "enable_infinite_scroll": true,
+        "products_per_page": 24,
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
@@ -227,6 +235,7 @@
     }
   },
   "order": [
+    "breadcrumb_B7icVb",
     "section",
     "main"
   ]
