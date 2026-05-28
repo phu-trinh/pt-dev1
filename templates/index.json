@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "sections": {
     "section_PBwRee": {
       "type": "section",
@@ -517,7 +517,7 @@
         "section_width": "page-width",
         "section_height": "medium",
         "section_height_custom": 50,
-        "color_scheme": "scheme-f746fcf3-1178-42d2-9a7d-6401b77022b4",
+        "color_scheme": "scheme-5",
         "background_media": "video",
         "video": "shopify://files/videos/keyvisual_pc_43149595-6895-4c7b-a30b-f6cdb6b3d188.mp4",
         "video_position": "cover",
