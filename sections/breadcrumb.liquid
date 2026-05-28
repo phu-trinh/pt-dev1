@@ -18,6 +18,7 @@
   endif
 %}
 
+{% if template == 'collection' or template == 'product' %}
 <div class="breadcrumb-section page-width">
     <nav class="breadcrumb">
         <a href="{{ routes.root_url }}">Home</a>
@@ -29,6 +30,7 @@
         <span>{{ product.title }}</span>
     </nav>
 </div>
+{% endif %}
 
 {% schema %}
 {
