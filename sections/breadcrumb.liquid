@@ -17,7 +17,7 @@
     endfor
   endif
 %}
-
+{% for item_collection in product.collections%}{{ item_collection.title }}#{% endfor %}
 {% if template == 'collection' or template contains 'product' %}
 <div class="breadcrumb-section section section--page-width">
     <nav class="breadcrumb">
