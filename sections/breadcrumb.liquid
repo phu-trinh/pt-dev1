@@ -10,10 +10,8 @@
 
   if breadcrumb_collection == blank
     for item_collection in product.collections
-      unless item_collection.handle == 'all' or item_collection.handle == 'frontpage'
         assign breadcrumb_collection = item_collection
         break
-      endunless
     endfor
   endif
 %}
