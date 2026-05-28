@@ -22,7 +22,10 @@
 <div class="breadcrumb-section section section--page-width">
     <nav class="breadcrumb">
         <a href="{{ routes.root_url }}">Home</a>
-        <span>/</span>        
+        <span>/</span>   
+        {% if template == 'collection' %}
+            <a href="{{ collection.url }}">{{ collection.title }}</a>  
+        {%  endif %}
         {% if template == 'product' %}
         {% if breadcrumb_collection != blank %}
             <a href="{{ breadcrumb_collection.url }}">{{ breadcrumb_collection.title }}</a>   
