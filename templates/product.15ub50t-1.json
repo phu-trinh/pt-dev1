@@ -9,6 +9,11 @@
  */
 {
   "sections": {
+    "breadcrumb_FUcVMT": {
+      "type": "breadcrumb",
+      "name": "Breadcrumb",
+      "settings": {}
+    },
     "main": {
       "type": "product-information",
       "blocks": {
@@ -5739,6 +5744,7 @@
     }
   },
   "order": [
+    "breadcrumb_FUcVMT",
     "main",
     "product_recommendations_qggXJq",
     "lg_storemapper_bdKLNb",
