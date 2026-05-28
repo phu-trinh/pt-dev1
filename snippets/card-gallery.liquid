@@ -160,7 +160,7 @@
     <a
       class="contents 111"
       ref="cardGalleryLink"
-      href="{{ product.selected_or_first_available_variant.url }}"
+      href="{{ product.selected_or_first_available_variant.url | within: collection }}"
       aria-label="{{- product.title -}}"
     >
       {% render 'slideshow',
