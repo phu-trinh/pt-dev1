@@ -35,6 +35,9 @@
   assign filter_param_name = filter.param_name | escape | replace: '.', '-'
 -%}
 {% capture accordion_children %}
+  {%  if filter.label == "Product type" %}
+    {% capture all_type_values %}snowboard,accessories{% endcapture %}
+  {%  endif %}  
   <details
     id="Facet-Details-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
     class="facets__panel"
@@ -198,7 +201,9 @@
             {% endif %}
             name="{{ filter.label }}"
           >
-            {%- for value in filter.values -%}
+            {%  assign available_filter_values = '' %}
+            {%- for value in filter.values -%}    
+              {% assign available_filter_values = available_filter_values | append: value.label | append: ',' %}             
               {% liquid
                 assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index | replace: '.', '-' | append: '-' | append: filter_style | append: '-' | append: in_drawer
                 assign is_disabled = false
@@ -379,6 +384,32 @@
                 {% endif %}
               </li>
             {%- endfor -%}
+            {%- if all_type_values != blank and filter.label == "Product type" -%}
+              {%- assign type_array = all_type_values | split: ',' -%}
+              {%- for type_val in type_array -%}
+                {%- assign type_val_trimmed = type_val | strip -%}
+                {%- assign match_term = ',' | append: type_val_trimmed | append: ',' | downcase -%}
+                {%- assign available_terms = ',' | append: available_filter_values | downcase -%}
+                {%- unless available_terms contains match_term -%}
+                  {%- assign custom_input_id = 'Filter-' | append: filter.param_name | escape | append: '-custom-' | append: forloop.index | replace: '.', '-' | append: '-' | append: filter_style | append: '-' | append: in_drawer -%}
+                  <li
+                    data-skip-node-update="true"
+                    class="facets__inputs-list-item facets__inputs-list-item--disabled"
+                  >
+                    {%- render 'checkbox',
+                      name: filter.param_name,
+                      value: type_val_trimmed,
+                      label: type_val_trimmed,
+                      checked: false,
+                      id: custom_input_id,
+                      disabled: true,
+                      inputRef: 'facetInputs[]',
+                      events: 'on:pointerenter="/prefetchPage" on:pointerleave="/cancelPrefetchPage"'
+                    -%}
+                  </li>
+                {%- endunless -%}
+              {%- endfor -%}
+            {%- endif -%}
           </ul>
         </div>
         {% if render_show_more %}
