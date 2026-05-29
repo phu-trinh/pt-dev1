@@ -36,7 +36,7 @@
 -%}
 {% capture accordion_children %}
   {%  if filter.label == "Product type" %}
-    {% capture all_type_values %}snowboard,accessories{% endcapture %}
+    {% capture all_type_values %}snowboard,accessories,electronic,computer{% endcapture %}
   {%  endif %}  
   <details
     id="Facet-Details-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
