@@ -171,8 +171,6 @@
   </sticky-add-to-cart>
 {% endif %}
 
-111222
-
 {% render 'product-information-content',
   product_media_size: closest.product.media.size,
   section_id: section.id,
@@ -181,6 +179,12 @@
   product_details: product_details,
   additional_blocks: additional_blocks
 %}
+
+<div class="section section--page-width">
+  {% assign specs = product.metafields.custom.spec_data.value %}
+  {{ specs.system.operating_system }}
+  {{ specs.system.processor_1 }}
+</div>
 
 {% stylesheet %}
   .sticky-add-to-cart__bar {
