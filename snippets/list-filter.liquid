@@ -389,7 +389,7 @@
                 {% endif %}
               </li>
             {%- endfor -%}
-            {%- if all_type_values != blank and filter.label == "Product type" -%}
+            {%- if all_type_values != blank -%}
               {%- assign type_array = all_type_values | split: ',' -%}
               {%- for type_val in type_array -%}
                 {%- assign type_val_trimmed = type_val | strip -%}
