@@ -1,8 +1,25 @@
-<div class="compare-button" data-compare-button data-product-type="{{ product.type }}">
-  compare checkbox here
-  <div class="product-json-hidden">
-    {% assign specs = product.metafields.custom.spec_data.value %}
-  </div>
+{%- assign product = closest.product -%}
+<div class="compare-button" data-compare-button data-product-type="{{ product.type | escape }}">
+  <label class="compare-checkbox-label">
+    <input 
+      type="checkbox" 
+      class="compare-checkbox-input" 
+      data-product-id="{{ product.id }}" 
+      data-product-title="{{ product.title | escape }}" 
+      data-product-image="{{ product.featured_media.preview_image | default: product.featured_image | default: product.images.first | image_url: width: 150 }}" 
+      data-product-url="{{ product.url }}" 
+      data-product-type="{{ product.type | escape }}"
+    >
+    <span class="compare-checkbox-custom">
+      <svg class="compare-checkbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </span>
+    <span class="compare-checkbox-text">Compare</span>
+  </label>
+  <script class="product-specs-json" type="application/json">
+    {{ product.metafields.custom.spec_data.value | json }}
+  </script>
 </div>
 
 {% schema %}
