@@ -207,12 +207,19 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "compare_button_3mcmee": {
+              "type": "_compare-button",
+              "name": "Compare button",
+              "settings": {},
+              "blocks": {}
             }
           },
           "block_order": [
             "card-gallery",
             "product_title_4nY4eT",
-            "price_EzJzMm"
+            "price_EzJzMm",
+            "compare_button_3mcmee"
           ]
         }
       },
