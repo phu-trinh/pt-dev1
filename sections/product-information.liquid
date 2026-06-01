@@ -182,50 +182,151 @@
 <div class="section section--page-width">
   {% assign specs = product.metafields.custom.spec_data.value %}
   {%- if specs != blank -%}
-    <div class="product-specs">
-      <h2 class="product-specs__title">All Spec</h2>
-      {%- for group in specs -%}
-        {%- assign group_title = group[0] | upcase -%}
-        {%- if group_title == 'PRODUCT' -%}{%- continue -%}{%- endif -%}
-        <div class="product-specs__group">
-          <h3 class="product-specs__group-title">{{ group_title }}</h3>
-          <hr class="product-specs__divider">
-          <div class="product-specs__grid">
-            {%- for field in group[1] -%}
-              {%- assign value = field[1] -%}
-              {%- if value != blank -%}
-                <div class="product-specs__item">
-                  <span class="product-specs__label">
-                    {%- assign label = '' -%}
-                    {%- assign key_parts = field[0] | split: '_' -%}
-                    {%- for part in key_parts -%}
-                      {%- if part == 'inch' -%}
-                        {%- assign label = label | append: ' [Inch]' -%}
-                      {%- elsif part == 'cm' -%}
-                        {%- assign label = label | append: ' [cm]' -%}
-                      {%- elsif part == '1' or part == '2' or part == '3' or part == '4' or part == '5' -%}
-                        {%- assign label = label | append: ' (' | append: part | append: ')' -%}
-                      {%- else -%}
-                        {%- assign capitalized_part = part | capitalize -%}
-                        {%- if label == '' -%}
-                          {%- assign label = capitalized_part -%}
-                        {%- else -%}
-                          {%- assign label = label | append: ' ' | append: capitalized_part -%}
-                        {%- endif -%}
-                      {%- endif -%}
-                    {%- endfor -%}
-                    {{ label }}
-                  </span>
-                  <span class="product-specs__value">
-                    {{ value | newline_to_br }}
-                  </span>
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
+    {%- assign key_specs = blank -%}
+    {%- for group in specs -%}
+      {%- assign group_key = group[0] | downcase -%}
+      {%- if group_key == 'key_spec' -%}
+        {%- assign key_specs = group[1] -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if key_specs != blank -%}
+      <div class="key-specs">
+        <div class="key-specs__header">
+          <h2 class="key-specs__title">Key Spec</h2>
+          <a href="#" onclick="window.print(); return false;" class="key-specs__print-btn">
+            <svg
+              class="icon icon-print"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
+              <path d="M6 14h12v8H6z"></path>
+            </svg>
+            Print
+          </a>
         </div>
-      {%- endfor -%}
+        <hr class="key-specs__divider">
+        <div class="key-specs__grid">
+          {%- for field in key_specs -%}
+            {%- assign value = field[1] -%}
+            {%- if value != blank -%}
+              <div class="key-specs__item">
+                <span class="key-specs__label">
+                  {%- assign label = '' -%}
+                  {%- assign key_parts = field[0] | split: '_' -%}
+                  {%- for part in key_parts -%}
+                    {%- if part == 'inch' -%}
+                      {%- assign label = label | append: ' [Inch]' -%}
+                    {%- elsif part == 'cm' -%}
+                      {%- assign label = label | append: ' [cm]' -%}
+                    {%- elsif part == '1' or part == '2' or part == '3' or part == '4' or part == '5' -%}
+                      {%- assign label = label | append: ' (' | append: part | append: ')' -%}
+                    {%- else -%}
+                      {%- assign capitalized_part = part | capitalize -%}
+                      {%- if label == '' -%}
+                        {%- assign label = capitalized_part -%}
+                      {%- else -%}
+                        {%- assign label = label | append: ' ' | append: capitalized_part -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {{ label }}
+                </span>
+                <span class="key-specs__value">
+                  {{ value | newline_to_br }}
+                </span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+    <div class="product-specs-toggle-wrapper">
+      <button type="button" class="product-specs-toggle-btn" id="ProductSpecsToggle">
+        <span>See All Specs</span>
+        <svg class="icon icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
     </div>
+
+    <div class="product-specs" id="ProductSpecs">
+      <div class="product-specs__inner">
+        <h2 class="product-specs__title">All Spec</h2>
+        {%- for group in specs -%}
+          {%- assign group_title = group[0] | upcase -%}
+          {%- if group_title == 'PRODUCT' or group_title == 'KEY_SPEC' -%}{%- continue -%}{%- endif -%}
+          <div class="product-specs__group">
+            <h3 class="product-specs__group-title">{{ group_title }}</h3>
+            <hr class="product-specs__divider">
+            <div class="product-specs__grid">
+              {%- for field in group[1] -%}
+                {%- assign value = field[1] -%}
+                {%- if value != blank -%}
+                  <div class="product-specs__item">
+                    <span class="product-specs__label">
+                      {%- assign label = '' -%}
+                      {%- assign key_parts = field[0] | split: '_' -%}
+                      {%- for part in key_parts -%}
+                        {%- if part == 'inch' -%}
+                          {%- assign label = label | append: ' [Inch]' -%}
+                        {%- elsif part == 'cm' -%}
+                          {%- assign label = label | append: ' [cm]' -%}
+                        {%- elsif part == '1' or part == '2' or part == '3' or part == '4' or part == '5' -%}
+                          {%- assign label = label | append: ' (' | append: part | append: ')' -%}
+                        {%- else -%}
+                          {%- assign capitalized_part = part | capitalize -%}
+                          {%- if label == '' -%}
+                            {%- assign label = capitalized_part -%}
+                          {%- else -%}
+                            {%- assign label = label | append: ' ' | append: capitalized_part -%}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {{ label }}
+                    </span>
+                    <span class="product-specs__value">
+                      {{ value | newline_to_br }}
+                    </span>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        function initToggle() {
+          const toggleBtn = document.getElementById('ProductSpecsToggle');
+          const specsContainer = document.getElementById('ProductSpecs');
+          if (!toggleBtn || !specsContainer) return;
+          
+          toggleBtn.addEventListener('click', function() {
+            const isVisible = specsContainer.classList.toggle('product-specs--visible');
+            toggleBtn.classList.toggle('is-active');
+            
+            const btnText = toggleBtn.querySelector('span');
+            if (btnText) {
+              btnText.textContent = isVisible ? 'Hide Specs' : 'See All Specs';
+            }
+          });
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initToggle);
+        } else {
+          initToggle();
+        }
+      })();
+    </script>
   {%- endif -%}
 </div>
 
@@ -415,9 +516,66 @@
 
   /* Product Specifications Section */
   .product-specs {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    overflow: hidden;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.4s ease;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: var(--font-body-family), sans-serif;
+  }
+
+  .product-specs.product-specs--visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
     margin-top: 40px;
     margin-bottom: 60px;
-    font-family: var(--font-body-family), sans-serif;
+  }
+
+  .product-specs__inner {
+    min-height: 0;
+  }
+
+  /* See All Specs Toggle Button */
+  .product-specs-toggle-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+  }
+
+  .product-specs-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--color-foreground-rgb));
+    background-color: transparent;
+    border: 1px solid rgb(var(--color-foreground-rgb));
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  }
+
+  .product-specs-toggle-btn:hover {
+    background-color: rgb(var(--color-foreground-rgb));
+    color: rgb(var(--color-background-rgb));
+  }
+
+  .product-specs-toggle-btn:active {
+    transform: scale(0.97);
+  }
+
+  .product-specs-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+  }
+
+  .product-specs-toggle-btn.is-active svg {
+    transform: rotate(180deg);
   }
 
   .product-specs__title {
@@ -505,6 +663,122 @@
     .product-specs__item:hover {
       background-color: transparent;
       transform: none;
+    }
+  }
+
+  /* Key Specifications Section */
+  .key-specs {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    font-family: var(--font-body-family), sans-serif;
+  }
+
+  .key-specs__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .key-specs__print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(var(--color-foreground-rgb));
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+
+  .key-specs__print-btn:hover {
+    opacity: 1;
+  }
+
+  .key-specs__print-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .key-specs__title {
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: rgb(var(--color-foreground-rgb));
+    margin: 0;
+  }
+
+  .key-specs__divider {
+    border: none;
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+    margin: 0 0 24px 0;
+  }
+
+  .key-specs__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 48px;
+    row-gap: 24px;
+  }
+
+  .key-specs__item {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .key-specs__item:hover {
+    border-color: rgb(var(--color-foreground-rgb) / 0.2);
+    transform: translateY(-1px);
+  }
+
+  .key-specs__label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+    margin-bottom: 8px;
+  }
+
+  .key-specs__value {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgb(var(--color-foreground-rgb));
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  /* Responsive for Key Specs */
+  @media screen and (max-width: 749px) {
+    .key-specs {
+      padding: 24px 20px;
+      border-radius: 12px;
+    }
+
+    .key-specs__title {
+      font-size: 1.75rem;
+    }
+
+    .key-specs__grid {
+      grid-template-columns: 1fr;
+      row-gap: 16px;
+      column-gap: 0;
+    }
+
+    .key-specs__item:hover {
+      transform: none;
+    }
+  }
+
+  @media print {
+    .key-specs__print-btn {
+      display: none !important;
     }
   }
 {% endstylesheet %}
