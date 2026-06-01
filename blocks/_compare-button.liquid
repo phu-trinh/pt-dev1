@@ -1,3 +1,9 @@
+<div class="compare-button" data-compare-button data-product-type="{{ product.type }}">
+    <div class="product-json-hidden">
+       {% assign specs = product.metafields.custom.spec_data.value %}
+    </div>
+</div>
+
 {% schema %}
 {
   "name": "Compare button",
