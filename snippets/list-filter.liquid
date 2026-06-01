@@ -35,9 +35,14 @@
   assign filter_param_name = filter.param_name | escape | replace: '.', '-'
 -%}
 {% capture accordion_children %}
-  {%  if filter.label == "Product type" %}
-    {% capture all_type_values %}snowboard,accessories,electronic,computer{% endcapture %}
-  {%  endif %}  
+  {% case filter.label %}
+    {%  when "Category" %}
+      {% capture all_type_values %}gram Book,gram,gram +view,gram Book,gram Pro,laptops 2in1{% endcapture %}
+    {% when "Laptops by Screen Size" %}
+      {% capture all_type_values %}17 inch Laptops,16 inch Laptops,15 inch Laptops,14 inch Laptops{% endcapture %}
+    {% when "Resolution" %}
+      {% capture all_type_values %}FHD (1920 x 1080),WQXGA (2560 x 1600),WUXGA (1920 x 1200){% endcapture %}   
+  {%  endcase %}
   <details
     id="Facet-Details-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
     class="facets__panel"
