@@ -10,41 +10,41 @@
 
   if breadcrumb_collection == blank
     for item_collection in product.collections
-        assign breadcrumb_collection = item_collection
-        break
+      assign breadcrumb_collection = item_collection
+      break
     endfor
   endif
-%}    
+%}
 {% if template == 'collection' or template contains 'product' %}
-<div class="breadcrumb-section section section--page-width">
+  <div class="breadcrumb-section section section--page-width">
     <nav class="breadcrumb">
-        <a href="{{ routes.root_url }}">Home</a>
-        <span>/</span>   
-        {% if template == 'collection' %}
-            {%- assign father = collection.metafields.custom.farther_collection.value -%}
-            {%- if father != blank -%}
-                <a href="{{ father.url }}">{{ father.title }}</a>
-                <span>/ </span>
-            {%- endif -%}
-            <a href="{{ collection.url }}">{{ collection.title }} </a>  
-        {%  endif %}        
-        {% if template contains 'product' %}
+      <a href="{{ routes.root_url }}">Home</a>
+      <span>/</span>
+      {% if template == 'collection' %}
+        {%- assign father = collection.metafields.custom.farther_collection.value -%}
+        {%- if father != blank -%}
+          <a href="{{ father.url }}">{{ father.title }}</a>
+          <span>/ </span>
+        {%- endif -%}
+        <a href="{{ collection.url }}">{{ collection.title }} </a>
+      {% endif %}
+      {% if template contains 'product' %}
         {% if breadcrumb_collection != blank %}
-            {%- assign father = breadcrumb_collection.metafields.custom.farther_collection.value -%}
-            {%- if father != blank -%}
-                <a href="{{ father.url }}">{{ father.title }}</a>
-                <span>/</span>
-            {%- endif -%}
-            <a href="{{ breadcrumb_collection.url }}"> {{ breadcrumb_collection.title }}</a>   
-            <span>/</span>     
-        {% endif %}        
-        <span>{{ product.title }}</span>
+          {%- assign father = breadcrumb_collection.metafields.custom.farther_collection.value -%}
+          {%- if father != blank -%}
+            <a href="{{ father.url }}">{{ father.title }}</a>
+            <span>/</span>
+          {%- endif -%}
+          <a href="{{ breadcrumb_collection.url }}"> {{ breadcrumb_collection.title }}</a>
+          <span>/</span>
         {% endif %}
+        <span>{{ product.title }}</span>
+      {% endif %}
     </nav>
-</div>
+  </div>
 {% endif %}
 
-{%  if template == 'collection' %}
+{% if template == 'collection' %}
   {%- assign current_handle = collection.handle -%}
   {%- assign sub_collections_exist = false -%}
 
@@ -153,7 +153,226 @@
       </div>
     </div>
   {%- endif -%}
-{%  endif %}
+{% endif %}
+
+{% if template contains 'product' %}
+  <style>
+    .breadcrumb-anchors-placeholder {
+      height: 57px;
+    }
+
+    .breadcrumb-anchors-wrapper {
+      width: 100%;
+      background-color: rgb(var(--color-background-rgb));
+      border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+      z-index: 99;
+    }
+
+    .breadcrumb-anchors-wrapper.is-fixed {
+      position: fixed;
+      left: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .breadcrumb-anchors {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      height: 56px;
+      padding: 0 16px;
+    }
+
+    .breadcrumb-anchor {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgb(var(--color-foreground-rgb) / 0.7);
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      padding: 0 4px;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .breadcrumb-anchor:hover {
+      color: rgb(var(--color-foreground-rgb));
+    }
+
+    .breadcrumb-anchor.is-active {
+      color: rgb(var(--color-foreground-rgb));
+      border-color: #eb0a0f; /* Match the red underline */
+      font-weight: 600;
+    }
+
+    @media screen and (max-width: 749px) {
+      .breadcrumb-anchors-placeholder {
+        height: 49px;
+      }
+      .breadcrumb-anchors {
+        gap: 24px;
+        height: 48px;
+      }
+      .breadcrumb-anchor {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+
+  <div class="breadcrumb-anchors-placeholder" id="BreadcrumbAnchorsPlaceholder">
+    <div class="breadcrumb-anchors-wrapper" id="BreadcrumbAnchors">
+      <div class="breadcrumb-anchors section--page-width">
+        <a href="#" class="breadcrumb-anchor" data-target="features">Features</a>
+        <a href="#" class="breadcrumb-anchor" data-target="specs">Specs</a>
+        <a href="#" class="breadcrumb-anchor" data-target="resources">Resource</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function initScrollSpy() {
+        const placeholder = document.getElementById('BreadcrumbAnchorsPlaceholder');
+        const anchorsBar = document.getElementById('BreadcrumbAnchors');
+        const anchors = document.querySelectorAll('.breadcrumb-anchor');
+        if (!anchorsBar || !placeholder || anchors.length === 0) return;
+
+        // 1. Fixed positioning toggle on scroll
+        function handleScroll() {
+          const scrollPos = window.scrollY || document.documentElement.scrollTop;
+          const placeholderRect = placeholder.getBoundingClientRect();
+          const placeholderTop = placeholderRect.top + scrollPos;
+          
+          const header =
+            document.querySelector('sticky-header') ||
+            document.querySelector('.header-wrapper') ||
+            document.querySelector('.shopify-section-group-header-group') ||
+            document.querySelector('header');
+
+          let headerHeight = 0;
+          if (header) {
+            const isHeaderSticky =
+              window.getComputedStyle(header).position === 'sticky' ||
+              window.getComputedStyle(header).position === 'fixed' ||
+              header.hasAttribute('data-sticky') ||
+              header.classList.contains('shopify-section-header-sticky');
+
+            if (isHeaderSticky) {
+              headerHeight = header.offsetHeight;
+            }
+          }
+
+          if (scrollPos > placeholderTop - headerHeight) {
+            anchorsBar.classList.add('is-fixed');
+            anchorsBar.style.top = `${headerHeight}px`;
+          } else {
+            anchorsBar.classList.remove('is-fixed');
+            anchorsBar.style.top = '';
+          }
+        }
+
+        // 2. Locate Sibling Section Nodes
+        const targets = {
+          features: document.querySelector('#data-product-featues'),
+          specs: document.querySelector('#specs-area'),
+          resources:
+            document.querySelector('[id*="product_recommendations"]') ||
+            document.querySelector('.product-recommendations'),
+        };
+
+        // 3. ScrollSpy logic: update active link on scroll
+        function updateActiveLink() {
+          const scrollPos = window.scrollY || document.documentElement.scrollTop;
+          const headerOffset = anchorsBar.offsetHeight + (parseFloat(anchorsBar.style.top) || 0);
+          const offsetBuffer = headerOffset + 80; // height of sticky elements + extra buffer
+
+          let activeSet = false;
+
+          for (const [key, section] of Object.entries(targets)) {
+            if (!section) continue;
+
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+
+            if (scrollPos >= sectionTop - offsetBuffer && scrollPos < sectionTop + sectionHeight - offsetBuffer) {
+              anchors.forEach((el) => el.classList.remove('is-active'));
+
+              const activeAnchor = document.querySelector(`.breadcrumb-anchor[data-target="${key}"]`);
+              if (activeAnchor) {
+                activeAnchor.classList.add('is-active');
+                activeSet = true;
+              }
+              break;
+            }
+          }
+
+          // Default fallback to first element at the top
+          if (!activeSet && scrollPos < 300) {
+            anchors.forEach((el) => el.classList.remove('is-active'));
+            const firstAnchor = document.querySelector('.breadcrumb-anchor[data-target="features"]');
+            if (firstAnchor) firstAnchor.classList.add('is-active');
+          }
+        }
+
+        // Combined event listener
+        function onScroll() {
+          handleScroll();
+          updateActiveLink();
+        }
+
+        window.addEventListener('scroll', onScroll);
+        window.addEventListener('resize', onScroll);
+        onScroll(); // Trigger initially
+
+        // 4. Smooth Anchor Scrolling on Click
+        anchors.forEach((anchor) => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetKey = this.getAttribute('data-target');
+            const targetSection = targets[targetKey];
+
+            if (targetSection) {
+              const header =
+                document.querySelector('sticky-header') ||
+                document.querySelector('.header-wrapper') ||
+                document.querySelector('.shopify-section-group-header-group') ||
+                document.querySelector('header');
+
+              let headerHeight = 0;
+              if (header) {
+                const isHeaderSticky =
+                  window.getComputedStyle(header).position === 'sticky' ||
+                  window.getComputedStyle(header).position === 'fixed' ||
+                  header.hasAttribute('data-sticky') ||
+                  header.classList.contains('shopify-section-header-sticky');
+
+                if (isHeaderSticky) {
+                  headerHeight = header.offsetHeight;
+                }
+              }
+
+              const barHeight = anchorsBar.offsetHeight;
+              const offsetTop = targetSection.offsetTop - headerHeight - barHeight - 10;
+
+              window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth',
+              });
+            }
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initScrollSpy);
+      } else {
+        initScrollSpy();
+      }
+    })();
+  </script>
+{% endif %}
 
 {% schema %}
 {
@@ -162,8 +381,7 @@
   "disabled_on": {
     "groups": ["header"]
   },
-  "settings": [
-      ],
+  "settings": [],
   "presets": [
     {
       "name": "Breadcrumb"

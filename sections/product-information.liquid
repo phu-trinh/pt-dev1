@@ -179,7 +179,7 @@
   additional_blocks: additional_blocks
 %}
 
-<div class="section section--page-width">
+<div class="section section--page-width" id="specs-area">
   {% assign specs = product.metafields.custom.spec_data.value %}
   {%- if specs != blank -%}
     {%- assign key_specs = blank -%}
@@ -249,7 +249,15 @@
     <div class="product-specs-toggle-wrapper">
       <button type="button" class="product-specs-toggle-btn" id="ProductSpecsToggle">
         <span>See All Specs</span>
-        <svg class="icon icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          class="icon icon-chevron-down"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </button>
@@ -303,23 +311,23 @@
     </div>
 
     <script>
-      (function() {
+      (function () {
         function initToggle() {
           const toggleBtn = document.getElementById('ProductSpecsToggle');
           const specsContainer = document.getElementById('ProductSpecs');
           if (!toggleBtn || !specsContainer) return;
-          
-          toggleBtn.addEventListener('click', function() {
+
+          toggleBtn.addEventListener('click', function () {
             const isVisible = specsContainer.classList.toggle('product-specs--visible');
             toggleBtn.classList.toggle('is-active');
-            
+
             const btnText = toggleBtn.querySelector('span');
             if (btnText) {
               btnText.textContent = isVisible ? 'Hide Specs' : 'See All Specs';
             }
           });
         }
-        
+
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', initToggle);
         } else {
@@ -329,6 +337,8 @@
     </script>
   {%- endif -%}
 </div>
+
+<div id="data-product-featues"></div>
 
 {% stylesheet %}
   .sticky-add-to-cart__bar {
