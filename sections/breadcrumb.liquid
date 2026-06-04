@@ -32,6 +32,11 @@
         {% if breadcrumb_collection != blank %}
           {%- assign father = breadcrumb_collection.metafields.custom.farther_collection.value -%}
           {%- if father != blank -%}
+            {%- assign grandfather = father.metafields.custom.farther_collection.value -%}
+            {%- if grandfather != blank -%}
+              <a href="{{ grandfather.url }}">{{ grandfather.title }}</a>
+              <span>/</span>
+            {%- endif -%}
             <a href="{{ father.url }}">{{ father.title }}</a>
             <span>/</span>
           {%- endif -%}
