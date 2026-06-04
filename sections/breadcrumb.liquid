@@ -23,6 +23,11 @@
       {% if template == 'collection' %}
         {%- assign father = collection.metafields.custom.farther_collection.value -%}
         {%- if father != blank -%}
+          {%- assign grandfather = father.metafields.custom.farther_collection.value -%}
+          {%- if grandfather != blank -%}
+            <a href="{{ grandfather.url }}">{{ grandfather.title }}</a>
+            <span>/ </span>
+          {%- endif -%}
           <a href="{{ father.url }}">{{ father.title }}</a>
           <span>/ </span>
         {%- endif -%}
@@ -249,7 +254,7 @@
           const scrollPos = window.scrollY || document.documentElement.scrollTop;
           const placeholderRect = placeholder.getBoundingClientRect();
           const placeholderTop = placeholderRect.top + scrollPos;
-          
+
           const header =
             document.querySelector('sticky-header') ||
             document.querySelector('.header-wrapper') ||
