@@ -11,7 +11,11 @@
   {% endif %}
 
   <div class="blog-post-card__content">
-    {{ article.all_tags }}
+    <ul>
+      {% for tag in article.tags %}
+        <li>{{ tag }}</li>
+      {% endfor %}
+    </ul>
     <a
       href="{{ article.url }}"
       data-testid="blog-post-link"
