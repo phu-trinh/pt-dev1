@@ -9,7 +9,7 @@
     {% if blog.tags.size > 0 %}
       <div class="blog-filter section">
         <div class="list-group">
-          <ul id="BlogTagFilter" class="tag-list">
+          <ul id="BlogTagFilter" class="tag-list" style="display: flex; gap: 20px;">
             <li>Filter by:</li>
             {% if request.path contains 'tagged' %}
               {% assign filter_name = request.path | split: 'tagged/' %}
