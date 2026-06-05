@@ -11,7 +11,7 @@
   {% endif %}
 
   <div class="blog-post-card__content">
-    <ul>
+    <ul style="display: flex; gap: 20px;">
       {% for tag in article.tags %}
         <li><a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="button">{{ tag }}</a></li>
       {% endfor %}
