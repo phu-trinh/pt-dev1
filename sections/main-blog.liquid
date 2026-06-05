@@ -12,7 +12,8 @@
           <ul id="BlogTagFilter" class="tag-list">
             <li>Filter by:</li>
             {% if request.path contains 'tagged' %}
-{{ request.path }}
+              {% assign filter_name = request.path | split: 'tagged/' %}
+              {{ filter_name[1] }}
             {%  else %}
           <li>
             <a href="{{ blog.url }}" class="button">
