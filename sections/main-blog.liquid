@@ -15,18 +15,18 @@
               {% assign filter_name = request.path | split: 'tagged/' %}
               {{ filter_name[1] | replace: '-', ' ' | capitalize }}
             {%  else %}
-          <li>
-            <a href="{{ blog.url }}" class="button">
-              {{ 'All Topics' }}
-            </a>
-          </li>
-            {% for tag in blog.all_tags %}
-            <li>
-              <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="button">
-              {{ tag }}
-              </a>
-            </li>
-            {% endfor %}
+              <li>
+                <a href="{{ blog.url }}" class="button">
+                  {{ 'All Topics' }}
+                </a>
+              </li>
+              {% for tag in blog.all_tags %}
+              <li>
+                <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="button">
+                {{ tag }}
+                </a>
+              </li>
+              {% endfor %}
           {% endif %}
           </ul>
         </div>
