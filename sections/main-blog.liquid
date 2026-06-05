@@ -6,6 +6,28 @@
   fetchpriority="low"
 ></script>
 
+{% if blog.tags.size > 0 %}
+      <div class="blog-filter">
+        <div class="list-group">
+          <ul id="BlogTagFilter" class="tag-list">
+            <li>Filter by:</li>
+          <li>
+            <a href="{{ blog.url }}" class="button">
+              {{ 'All Topics' }}
+            </a>
+          </li>
+            {% for tag in blog.all_tags %}
+            <li>
+              <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="button">
+              {{ tag }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+
 <blog-posts-list section-id="{{ section.id }}">
   <div class="section-background color-{{ section.settings.color_scheme }}"></div>
   <div
