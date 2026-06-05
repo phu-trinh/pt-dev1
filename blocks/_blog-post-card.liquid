@@ -11,6 +11,7 @@
   {% endif %}
 
   <div class="blog-post-card__content">
+    {{ article.all_tags }}
     <a
       href="{{ article.url }}"
       data-testid="blog-post-link"
