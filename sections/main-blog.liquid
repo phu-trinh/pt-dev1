@@ -11,6 +11,9 @@
         <div class="list-group">
           <ul id="BlogTagFilter" class="tag-list">
             <li>Filter by:</li>
+            {% if request.path contains 'tagged' %}
+
+            {%  else %}
           <li>
             <a href="{{ blog.url }}" class="button">
               {{ 'All Topics' }}
@@ -23,12 +26,11 @@
               </a>
             </li>
             {% endfor %}
+          {% endif %}
           </ul>
         </div>
       </div>
     {% endif %}
-
-    aa{{blog.tags.size }}sss{{ request.path }}ddd
 
 <blog-posts-list section-id="{{ section.id }}">
   <div class="section-background color-{{ section.settings.color_scheme }}"></div>
