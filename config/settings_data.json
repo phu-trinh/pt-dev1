@@ -82,6 +82,13 @@
         "type": "shopify://apps/spin-studio-360-product-spin/blocks/spinstudio_embed/caf4b6a9-7642-4e66-bcf7-11d11c83cff2",
         "disabled": false,
         "settings": {}
+      },
+      "d9e83779-78e1-461f-a55c-232f11fc9116": {
+        "type": "shopify://apps/boost-ai-search-filter/blocks/boost-sd-ssr/7fc998ae-a150-4367-bab8-505d8a4503f7",
+        "disabled": false,
+        "settings": {
+          "templateId": "U3WfJzyKEE"
+        }
       }
     },
     "color_schemes": {
