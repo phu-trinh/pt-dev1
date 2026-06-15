@@ -1,0 +1,212 @@
+<div class="pdp-key-features">
+  <div class="key_1">
+    <span class="heading">Size [Inch]</span><span class="value" data-getJsonValue="Size [Inch]"></span>
+  </div>
+  <div class="key_2">
+    <span class="heading">Resolution</span><span class="value" data-getJsonValue="Resolution"></span>
+    <span class="heading">Refresh Rate</span><span class="value" data-getJsonValue="DP (Max. Resolution at Hz)"></span>
+  </div>
+  <div class="key_3">
+    <span class="heading">Panel Type</span><span class="value" data-getJsonValue="Panel Type"></span>
+  </div>
+  <div class="key_3_1">
+    <span class="heading">Color Gamut</span><span class="value" data-getJsonValue="Color Gamut (Min.)"></span>
+  </div>
+  <div class="key_4">
+    <span class="heading">Display Position Adjustments</span
+    ><span class="value" data-getJsonValue="Display Position Adjustments"></span>
+  </div>
+  <div class="key_5" data-getJsonValue="Dimensions">
+    <span class="heading">Ports</span>
+    <span>HDMI: <span class="value" data-getJsonValue="HDMI"></span></span>
+    <span>DisplayPort: <span class="value" data-getJsonValue="DisplayPort"></span></span>
+    <span
+      >Thunderbolt:
+      <span
+        class="value"
+        {% unless product.metafields.custom.thunderbolt != blank %}
+          data-getJsonValue="Thunderbolt"
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.thunderbolt %}{{ product.metafields.custom.thunderbolt.value }}{% endif -%}
+      </span></span
+    >
+    <span
+      >USB-C:
+      <span
+        class="value"
+        {% unless product.metafields.custom.usb_c != blank %}
+          data-getJsonValue="USB-C"
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.usb_c %}{{ product.metafields.custom.usb_c.value }}{% endif -%}
+      </span></span
+    >
+    <span
+      >USB Upstream Port:
+      <span
+        class="value"
+        {% unless product.metafields.custom.usb_upstream_port != blank %}
+          data-getJsonValue="USB Upstream Port"
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.usb_upstream_port -%}
+          {{- product.metafields.custom.usb_upstream_port.value -}}
+        {%- endif -%}
+      </span></span
+    >
+    <span
+      >USB Downstream Port:
+      <span
+        class="value"
+        {% unless product.metafields.custom.usb_downstream_port != blank %}
+          data-getJsonValue="USB Downstream Port"
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.usb_downstream_port -%}
+          {{- product.metafields.custom.usb_downstream_port.value -}}
+        {%- endif -%}
+      </span></span
+    >
+    <span>D-Sub: <span class="value" data-getJsonValue="D-Sub"></span></span>
+    <span>LAN (RJ-45): <span class="value" data-getJsonValue="LAN (RJ-45)"></span></span>
+    <span>Daisy Chain: <span class="value" data-getJsonValue="Daisy Chain"></span></span>
+    <span>Bulit-in KVM: <span class="value" data-getJsonValue="Bulit-in KVM"></span></span>
+    <span>DVI-D: <span class="value" data-getJsonValue="DVI-D"></span></span>
+  </div>
+  <div class="key_6">
+    <span class="heading">SWAPPLICATION</span>
+    <span class="value" data-getJsonValue="LG Switch"></span>
+    <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)"></span>
+    <span class="value" data-getJsonValue="Dual Controller"></span>
+  </div>
+</div>
+
+<script id="productJson" type="application/json">
+  {{ product.metafields.custom.spec_data }}
+</script>
+
+{% style %}
+  .pdp-key-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .pdp-key-features > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pdp-key-features .heading {
+    font-weight: 600;
+  }
+{% endstyle %}
+
+<script>
+  (function () {
+    const productJsonEl = document.getElementById('productJson');
+    if (!productJsonEl) return;
+
+    try {
+      const rawText = productJsonEl.textContent.trim();
+      if (!rawText) return;
+
+      let data = JSON.parse(rawText);
+      if (typeof data === 'string') {
+        data = JSON.parse(data);
+      }
+
+      if (!data) return;
+
+      // Flatten spec data to map normalized keys to values
+      const specMap = {};
+      function traverse(obj) {
+        if (obj && typeof obj === 'object') {
+          for (const key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+              const val = obj[key];
+              if (val && typeof val === 'object') {
+                traverse(val);
+              } else {
+                const normalized = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+                specMap[normalized] = val;
+                specMap[key.toLowerCase()] = val;
+              }
+            }
+          }
+        }
+      }
+      traverse(data);
+
+      // Populate elements with data-getJsonValue
+      document.querySelectorAll('[data-getJsonValue]').forEach((element) => {
+        const attrValue = element.getAttribute('data-getJsonValue');
+        if (!attrValue) return;
+
+        const normalizedAttr = attrValue.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const targetValue =
+          specMap[normalizedAttr] !== undefined ? specMap[normalizedAttr] : specMap[attrValue.toLowerCase()];
+
+        if (targetValue !== undefined && targetValue !== null) {
+          // If the element has class "value" or is a span, set its text.
+          // Otherwise, find a child with class "value" to set.
+          const target =
+            element.tagName === 'SPAN' || element.classList.contains('value')
+              ? element
+              : element.querySelector('.value') || element;
+
+          target.textContent = targetValue;
+        }
+      });
+
+      // Show/hide .key_3_1 based on whether Color Gamut (Min.) has a value
+      const colorGamutVal =
+        specMap['colorgamutmin'] !== undefined ? specMap['colorgamutmin'] : specMap['color gamut (min.)'];
+      const key31El = document.querySelector('.key_3_1');
+      if (key31El) {
+        const hasColorGamut =
+          colorGamutVal !== undefined && colorGamutVal !== null && colorGamutVal.toString().trim() !== '';
+        key31El.style.display = hasColorGamut ? '' : 'none';
+      }
+
+      // Show/hide .key_6 based on whether it has any populated value
+      const key6El = document.querySelector('.key_6');
+      if (key6El) {
+        let hasValue = false;
+        key6El.querySelectorAll('[data-getJsonValue]').forEach((el) => {
+          const attr = el.getAttribute('data-getJsonValue');
+          if (attr) {
+            const norm = attr.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const val = specMap[norm] !== undefined ? specMap[norm] : specMap[attr.toLowerCase()];
+            if (val !== undefined && val !== null && val.toString().trim() !== '') {
+              hasValue = true;
+            }
+          }
+        });
+        // Hide .key_6 when it has value, show when it doesn't
+        key6El.style.display = hasValue ? 'none' : '';
+      }
+    } catch (e) {
+      console.warn('Error parsing or processing key features JSON:', e);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Key Features",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Key Features"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Key Features"
+    }
+  ]
+}
+{% endschema %}
