@@ -1,0 +1,25 @@
+{{ 'projection-style.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'projection-index.css' | asset_url | stylesheet_tag: preload: true }}
+
+<script src="{{ 'language.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'htmlTemplates.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'productsData.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'commonFunc.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'calculate.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'drawRoom.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'start.js' | asset_url }}" defer="defer"></script>
+
+<div class="sitecon" id="projection-calculator-en-root" lang="en"></div>
+
+{% schema %}
+{
+  "name": "Calculator",
+  "tag": "div",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Calculator"
+    }
+  ]
+}
+{% endschema %}
