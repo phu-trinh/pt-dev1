@@ -99,6 +99,12 @@
               },
               "blocks": {}
             },
+            "pdp_key_features_6HiFMJ": {
+              "type": "_pdp_key_features",
+              "name": "Key Features",
+              "settings": {},
+              "blocks": {}
+            },
             "spin_studio_360_product_spin_spinstudio_x7daza": {
               "type": "shopify://apps/spin-studio-360-product-spin/blocks/spinstudio/caf4b6a9-7642-4e66-bcf7-11d11c83cff2",
               "disabled": true,
@@ -267,6 +273,7 @@
           },
           "block_order": [
             "text_GdGg9z",
+            "pdp_key_features_6HiFMJ",
             "spin_studio_360_product_spin_spinstudio_x7daza",
             "group_icgrde",
             "divider_VJhene",
