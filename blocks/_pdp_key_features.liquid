@@ -87,10 +87,10 @@
     </span>
   </div>
   <div class="key_6">
-    <span class="heading">SWAPPLICATION</span>
+    <span class="heading">SW APPLICATION</span>
     <span class="value" data-getJsonValue="LG Switch"></span>
-    <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)"></span>
-    <span class="value" data-getJsonValue="Dual Controller"></span>
+    <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)" data-YESNO></span>
+    <span class="value" data-getJsonValue="Dual Controller" data-YESNO></span>
   </div>
 </div>
 
@@ -192,7 +192,10 @@
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (valStr.toLowerCase().includes('cm') ? valStr : valStr + ' cm') : '';
           } else if (attrValue === 'Display Position Adjustments') {
-            displayValue = targetValue.toString().replace(/\s*\/\s*/g, ' / ').trim();
+            displayValue = targetValue
+              .toString()
+              .replace(/\s*\/\s*/g, ' / ')
+              .trim();
           } else if (element.hasAttribute('data-maxResolution')) {
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (/hz$/i.test(valStr) ? valStr : valStr + 'Hz') : '';
