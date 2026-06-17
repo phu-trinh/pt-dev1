@@ -32,7 +32,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.hdmi != blank %}
-          data-getJsonValue="HDMI" data-YESNO
+          data-getJsonValue="HDMI" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.hdmi %}{{ product.metafields.custom.hdmi.value }}{% endif -%}
@@ -197,6 +197,30 @@
           return;
         }
 
+        if (element.hasAttribute('data-hdmiyesno')) {
+          if (targetValue !== undefined && targetValue !== null) {
+            const valStr = targetValue.toString().toLowerCase();
+            const countMatch = valStr.match(/([2-5])\s*(?:ea|ae)/i) || valStr.match(/\b([2-5])\b/);
+            if (countMatch) {
+              element.style.display = '';
+              element.textContent = `HDMI x${countMatch[1]}`;
+            } else if (valStr.includes('yes') || valStr.includes('1ea') || valStr.includes('1ae') || /\b1\b/.test(valStr)) {
+              element.style.display = '';
+              element.textContent = 'HDMI';
+            } else if (valStr.trim() !== '' && !valStr.includes('no')) {
+              element.style.display = '';
+              element.textContent = 'HDMI';
+            } else {
+              element.style.display = 'none';
+              element.textContent = '';
+            }
+          } else {
+            element.style.display = 'none';
+            element.textContent = '';
+          }
+          return;
+        }
+
         if (targetValue !== undefined && targetValue !== null) {
           // If the element has class "value" or is a span, set its text.
           // Otherwise, find a child with class "value" to set.
@@ -232,8 +256,21 @@
         }
       });
 
-      // Format commas for data-sw-yesno elements
-      const swElements = Array.from(document.querySelectorAll('[data-sw-yesno]')).filter(
+      // Format commas for .key5_data elements
+      const portElements = Array.from(document.querySelectorAll('.key5_data .value')).filter(
+        (el) => el.style.display !== 'none' && el.textContent.trim() !== ''
+      );
+      portElements.forEach((el, index) => {
+        let text = el.textContent.replace(/,\s*$/, '').trim();
+        if (index < portElements.length - 1) {
+          el.textContent = text + ', ';
+        } else {
+          el.textContent = text;
+        }
+      });
+
+      // Format commas for .key_6 elements
+      const swElements = Array.from(document.querySelectorAll('.key_6 .value')).filter(
         (el) => el.style.display !== 'none' && el.textContent.trim() !== ''
       );
       swElements.forEach((el, index) => {
