@@ -32,53 +32,41 @@
       <span class="value" data-getJsonValue="HDMI" data-YESNO>HDMI, </span>
       <span class="value" data-getJsonValue="DisplayPort" data-YESNO>DisplayPort, </span>
       <span
-        >Thunderbolt:
-        <span
-          class="value"
-          {% unless product.metafields.custom.thunderbolt != blank %}
-            data-getJsonValue="Thunderbolt"
-          {% endunless %}
-        >
-          {%- if product.metafields.custom.thunderbolt %}{{ product.metafields.custom.thunderbolt.value }}{% endif -%}
-        </span></span
+        class="value"
+        {% unless product.metafields.custom.thunderbolt != blank %}
+          data-getJsonValue="Thunderbolt"
+        {% endunless %}
       >
+        {%- if product.metafields.custom.thunderbolt %}{{ product.metafields.custom.thunderbolt.value }}{% endif -%}
+      </span>
       <span
-        >USB-C:
-        <span
-          class="value"
-          {% unless product.metafields.custom.usb_c != blank %}
-            data-getJsonValue="USB-C"
-          {% endunless %}
-        >
-          {%- if product.metafields.custom.usb_c %}{{ product.metafields.custom.usb_c.value }}{% endif -%}
-        </span></span
+        class="value"
+        {% unless product.metafields.custom.usb_c != blank %}
+          data-getJsonValue="USB-C"
+        {% endunless %}
       >
+        {%- if product.metafields.custom.usb_c %}{{ product.metafields.custom.usb_c.value }}{% endif -%}
+      </span>
       <span
-        >USB Upstream Port:
-        <span
-          class="value"
-          {% unless product.metafields.custom.usb_upstream_port != blank %}
-            data-getJsonValue="USB Upstream Port"
-          {% endunless %}
-        >
-          {%- if product.metafields.custom.usb_upstream_port -%}
-            {{- product.metafields.custom.usb_upstream_port.value -}}
-          {%- endif -%}
-        </span></span
+        class="value"
+        {% unless product.metafields.custom.usb_upstream_port != blank %}
+          data-getJsonValue="USB Upstream Port"
+        {% endunless %}
       >
+        {%- if product.metafields.custom.usb_upstream_port -%}
+          {{- product.metafields.custom.usb_upstream_port.value -}}
+        {%- endif -%}
+      </span>
       <span
-        >USB Downstream Port:
-        <span
-          class="value"
-          {% unless product.metafields.custom.usb_downstream_port != blank %}
-            data-getJsonValue="USB Downstream Port"
-          {% endunless %}
-        >
-          {%- if product.metafields.custom.usb_downstream_port -%}
-            {{- product.metafields.custom.usb_downstream_port.value -}}
-          {%- endif -%}
-        </span></span
+        class="value"
+        {% unless product.metafields.custom.usb_downstream_port != blank %}
+          data-getJsonValue="USB Downstream Port"
+        {% endunless %}
       >
+        {%- if product.metafields.custom.usb_downstream_port -%}
+          {{- product.metafields.custom.usb_downstream_port.value -}}
+        {%- endif -%}
+      </span>
       <span class="value" data-getJsonValue="D-Sub" data-sw-yesno></span>
       <span class="value" data-getJsonValue="LAN (RJ-45)" data-sw-yesno></span>
       <span class="value" data-getJsonValue="Daisy Chain" data-sw-yesno></span>
