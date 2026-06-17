@@ -88,9 +88,9 @@
   </div>
   <div class="key_6">
     <span class="heading">SW APPLICATION</span>
-    <span class="value" data-getJsonValue="LG Switch"></span>
-    <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)" data-YESNO></span>
-    <span class="value" data-getJsonValue="Dual Controller" data-YESNO></span>
+    <span class="value" data-getJsonValue="LG Switch" data-sw-yesno></span>
+    <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)" data-sw-yesno></span>
+    <span class="value" data-getJsonValue="Dual Controller" data-sw-yesno></span>
   </div>
 </div>
 
@@ -176,6 +176,23 @@
           return;
         }
 
+        if (element.hasAttribute('data-sw-yesno')) {
+          if (targetValue !== undefined && targetValue !== null) {
+            const valStr = targetValue.toString().toUpperCase();
+            if (valStr.includes('YES')) {
+              element.style.display = '';
+              element.textContent = attrValue;
+            } else {
+              element.style.display = 'none';
+              element.textContent = '';
+            }
+          } else {
+            element.style.display = 'none';
+            element.textContent = '';
+          }
+          return;
+        }
+
         if (targetValue !== undefined && targetValue !== null) {
           // If the element has class "value" or is a span, set its text.
           // Otherwise, find a child with class "value" to set.
@@ -211,6 +228,19 @@
         }
       });
 
+      // Format commas for data-sw-yesno elements
+      const swElements = Array.from(document.querySelectorAll('[data-sw-yesno]')).filter(
+        (el) => el.style.display !== 'none' && el.textContent.trim() !== ''
+      );
+      swElements.forEach((el, index) => {
+        let text = el.textContent.replace(/,\s*$/, '').trim();
+        if (index < swElements.length - 1) {
+          el.textContent = text + ', ';
+        } else {
+          el.textContent = text;
+        }
+      });
+
       // Show/hide .key_3_1 based on whether Color Gamut (Min.) or (Typ.) has a value
       const colorGamutMinVal =
         specMap['colorgamutmin'] !== undefined ? specMap['colorgamutmin'] : specMap['color gamut (min.)'];
@@ -224,18 +254,13 @@
         key31El.style.display = hasColorGamut ? '' : 'none';
       }
 
-      // Show/hide .key_6 based on whether it has any populated value
+      // Show/hide .key_6 based on whether it has any visible populated value
       const key6El = document.querySelector('.key_6');
       if (key6El) {
         let hasValue = false;
         key6El.querySelectorAll('[data-getJsonValue]').forEach((el) => {
-          const attr = el.getAttribute('data-getJsonValue');
-          if (attr) {
-            const norm = attr.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const val = specMap[norm] !== undefined ? specMap[norm] : specMap[attr.toLowerCase()];
-            if (val !== undefined && val !== null && val.toString().trim() !== '') {
-              hasValue = true;
-            }
+          if (el.style.display !== 'none' && el.textContent.trim() !== '') {
+            hasValue = true;
           }
         });
         // Show .key_6 when it has value, hide when it doesn't
