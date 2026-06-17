@@ -73,12 +73,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "pdp_key_features_Ppa3Qp": {
-              "type": "_pdp_key_features",
-              "name": "Key Features",
-              "settings": {},
-              "blocks": {}
-            },
             "text_GdGg9z": {
               "type": "text",
               "name": "Product title",
@@ -103,6 +97,12 @@
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
+              "blocks": {}
+            },
+            "pdp_key_features_Ppa3Qp": {
+              "type": "_pdp_key_features",
+              "name": "Key Features",
+              "settings": {},
               "blocks": {}
             },
             "spin_studio_360_product_spin_spinstudio_x7daza": {
@@ -272,8 +272,8 @@
             }
           },
           "block_order": [
-            "pdp_key_features_Ppa3Qp",
             "text_GdGg9z",
+            "pdp_key_features_Ppa3Qp",
             "spin_studio_360_product_spin_spinstudio_x7daza",
             "group_icgrde",
             "divider_VJhene",
