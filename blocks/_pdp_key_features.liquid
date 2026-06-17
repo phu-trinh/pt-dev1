@@ -220,14 +220,64 @@
         if (element.hasAttribute('data-hdmiyesno') || element.hasAttribute('data-displayportyesno')) {
           const displayText = element.getAttribute('data-text') || 'HDMI';
           if (targetValue !== undefined && targetValue !== null) {
+            element.setAttribute('data-jsonValue', targetValue);
             const valStr = targetValue.toString().toLowerCase();
-            const countMatch =
-              valStr.match(/([2-5])\s*(?:ea|ae)/i) ||
-              valStr.match(/\(\s*([2-5])\s*\)/) ||
-              valStr.match(/^\s*([2-5])\s*$/);
-            if (countMatch) {
+            const upDownMatch = valStr.match(/(\d+)\s*ea\s*,\s*(\d+)\s*up\s*\/\s*(\d+)\s*down/i);
+            if (upDownMatch) {
               element.style.display = '';
-              element.textContent = `${displayText} x${countMatch[1]}`;
+              element.textContent = `${displayText} x${upDownMatch[1]} (Up x${upDownMatch[2]}, Down x${upDownMatch[3]})`;
+              return;
+            }
+
+            // Check for "via .../Xea" pattern
+            const viaMatches = [...valStr.matchAll(/via\s+([a-zA-Z0-9\s-]+)\s*\/\s*(\d+)\s*(?:ea|ae)/gi)];
+            if (viaMatches.length > 0) {
+              const rawMatches = [...targetValue.matchAll(/via\s+([a-zA-Z0-9\s-]+)\s*\/\s*(\d+)\s*(?:ea|ae)/gi)];
+              const subParts = rawMatches.map(m => `via ${m[1].trim()} x${m[2]}`);
+              const totalCount = rawMatches.reduce((sum, m) => sum + parseInt(m[2], 10), 0);
+              
+              element.style.display = '';
+              if (totalCount > 1) {
+                element.textContent = `${displayText} x${totalCount} (${subParts.join(', ')})`;
+              } else {
+                element.textContent = `${displayText} (${subParts.join(', ')})`;
+              }
+              return;
+            }
+
+            let count = 0;
+            const inOutMatch = valStr.match(/in\s*(\d+)\s*(?:ea|ae)\s*\/\s*out\s*(\d+)\s*(?:ea|ae)/i);
+            if (inOutMatch) {
+              count = parseInt(inOutMatch[1], 10) + parseInt(inOutMatch[2], 10);
+            } else {
+              const normDisplay = displayText.toLowerCase().replace(/[^a-z0-9]/g, '');
+              const parts = valStr.split(/[,;]/);
+              let foundMatch = false;
+              for (const part of parts) {
+                const normPart = part.toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (normPart.includes(normDisplay)) {
+                  const match = part.match(/(\d+)\s*(?:ea|ae)/i);
+                  if (match) {
+                    count = parseInt(match[1], 10);
+                    foundMatch = true;
+                    break;
+                  }
+                }
+              }
+              if (!foundMatch) {
+                const match =
+                  valStr.match(/([2-5])\s*(?:ea|ae)/i) ||
+                  valStr.match(/\(\s*([2-5])\s*\)/) ||
+                  valStr.match(/^\s*([2-5])\s*$/);
+                if (match) {
+                  count = parseInt(match[1], 10);
+                }
+              }
+            }
+
+            if (count > 1) {
+              element.style.display = '';
+              element.textContent = `${displayText} x${count}`;
             } else if (
               valStr.includes('yes') ||
               valStr.includes('1ea') ||
