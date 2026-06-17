@@ -245,6 +245,17 @@
               return;
             }
 
+            // Check for "Name/Xea" pattern (without via)
+            const subPortMatches = [...valStr.matchAll(/([a-zA-Z0-9\s-]+)\s*\/\s*(\d+)\s*(?:ea|ae)/gi)];
+            if (subPortMatches.length > 0) {
+              const rawMatches = [...targetValue.matchAll(/([a-zA-Z0-9\s-]+)\s*\/\s*(\d+)\s*(?:ea|ae)/gi)];
+              const subParts = rawMatches.map(m => `via ${m[1].trim()} x${m[2]}`);
+              
+              element.style.display = '';
+              element.textContent = `${displayText}(${subParts.join(', ')})`;
+              return;
+            }
+
             let count = 0;
             const inOutMatch = valStr.match(/in\s*(\d+)\s*(?:ea|ae)\s*\/\s*out\s*(\d+)\s*(?:ea|ae)/i);
             if (inOutMatch) {
