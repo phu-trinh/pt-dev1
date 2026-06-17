@@ -235,8 +235,8 @@
             }
           }
         });
-        // Hide .key_6 when it has value, show when it doesn't
-        key6El.style.display = hasValue ? 'none' : '';
+        // Show .key_6 when it has value, hide when it doesn't
+        key6El.style.display = hasValue ? '' : 'none';
       }
     } catch (e) {
       console.warn('Error parsing or processing key features JSON:', e);
