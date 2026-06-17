@@ -32,7 +32,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.hdmi != blank %}
-          data-getJsonValue="HDMI" data-hdmiyesno
+          data-getJsonValue="HDMI" data-text="HDMI" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.hdmi %}{{ product.metafields.custom.hdmi.value }}{% endif -%}
@@ -40,7 +40,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.displayport != blank %}
-          data-getJsonValue="DisplayPort" data-displayportyesno
+          data-getJsonValue="DisplayPort" data-text="Display Port" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.displayport %}{{ product.metafields.custom.displayport.value }}{% endif -%}
@@ -48,7 +48,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.thunderbolt != blank %}
-          data-getJsonValue="Thunderbolt"
+          data-getJsonValue="Thunderbolt" data-text="Thunderbolt" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.thunderbolt %}{{ product.metafields.custom.thunderbolt.value }}{% endif -%}
@@ -56,7 +56,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.usb_c != blank %}
-          data-getJsonValue="USB-C"
+          data-getJsonValue="USB-C" data-text="USB-C" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.usb_c %}{{ product.metafields.custom.usb_c.value }}{% endif -%}
@@ -64,7 +64,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.usb_upstream_port != blank %}
-          data-getJsonValue="USB Upstream Port"
+          data-getJsonValue="USB Upstream Port" data-text="USB Upstream Port" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.usb_upstream_port -%}
@@ -74,7 +74,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.usb_downstream_port != blank %}
-          data-getJsonValue="USB Downstream Port"
+          data-getJsonValue="USB Downstream Port" data-text="USB Downstream Port" data-hdmiyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.usb_downstream_port -%}
@@ -217,8 +217,8 @@
           return;
         }
 
-        if (element.hasAttribute('data-hdmiyesno')) {
-          console.log('HDMI targetValue:', targetValue);
+        if (element.hasAttribute('data-hdmiyesno') || element.hasAttribute('data-displayportyesno')) {
+          const displayText = element.getAttribute('data-text') || 'HDMI';
           if (targetValue !== undefined && targetValue !== null) {
             const valStr = targetValue.toString().toLowerCase();
             const countMatch =
@@ -227,7 +227,7 @@
               valStr.match(/^\s*([2-5])\s*$/);
             if (countMatch) {
               element.style.display = '';
-              element.textContent = `HDMI x${countMatch[1]}`;
+              element.textContent = `${displayText} x${countMatch[1]}`;
             } else if (
               valStr.includes('yes') ||
               valStr.includes('1ea') ||
@@ -235,42 +235,10 @@
               /\b1\b/.test(valStr)
             ) {
               element.style.display = '';
-              element.textContent = 'HDMI';
+              element.textContent = displayText;
             } else if (valStr.trim() !== '' && !valStr.includes('no')) {
               element.style.display = '';
-              element.textContent = 'HDMI';
-            } else {
-              element.style.display = 'none';
-              element.textContent = '';
-            }
-          } else {
-            element.style.display = 'none';
-            element.textContent = '';
-          }
-          return;
-        }
-
-        if (element.hasAttribute('data-displayportyesno')) {
-          if (targetValue !== undefined && targetValue !== null) {
-            const valStr = targetValue.toString().toLowerCase();
-            const countMatch =
-              valStr.match(/([2-5])\s*(?:ea|ae)/i) ||
-              valStr.match(/\(\s*([2-5])\s*\)/) ||
-              valStr.match(/^\s*([2-5])\s*$/);
-            if (countMatch) {
-              element.style.display = '';
-              element.textContent = `DisplayPort x${countMatch[1]}`;
-            } else if (
-              valStr.includes('yes') ||
-              valStr.includes('1ea') ||
-              valStr.includes('1ae') ||
-              /\b1\b/.test(valStr)
-            ) {
-              element.style.display = '';
-              element.textContent = 'DisplayPort';
-            } else if (valStr.trim() !== '' && !valStr.includes('no')) {
-              element.style.display = '';
-              element.textContent = 'DisplayPort';
+              element.textContent = displayText;
             } else {
               element.style.display = 'none';
               element.textContent = '';
