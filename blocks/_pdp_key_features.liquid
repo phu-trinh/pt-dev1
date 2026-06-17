@@ -29,8 +29,22 @@
   <div class="key_5" data-getJsonValue="Dimensions">
     <span class="heading">Ports</span>
     <span class="key5_data">
-      <span class="value" data-getJsonValue="HDMI" data-YESNO>HDMI, </span>
-      <span class="value" data-getJsonValue="DisplayPort" data-YESNO>DisplayPort, </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.hdmi != blank %}
+          data-getJsonValue="HDMI" data-YESNO
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.hdmi %}{{ product.metafields.custom.hdmi.value }}{% endif -%}
+      </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.displayport != blank %}
+          data-getJsonValue="DisplayPort" data-YESNO
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.displayport %}{{ product.metafields.custom.displayport.value }}{% endif -%}
+      </span>
       <span
         class="value"
         {% unless product.metafields.custom.thunderbolt != blank %}
