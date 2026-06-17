@@ -1,6 +1,6 @@
 <div class="pdp-key-features">
   <div class="key_1">
-    <span class="heading">Size</span>
+    <span class="heading">Size [Inch] / Size [cm]</span>
     <span
       ><span class="value" data-getJsonValue="Size [Inch]"></span>" /
       <span class="value" data-getJsonValue="Size [cm]"></span
@@ -10,7 +10,7 @@
     <span class="heading">Resolution</span>
     <span>
       <span class="value" data-getJsonValue="Resolution"></span>
-      <span class="value" data-getJsonValue="DP (Max. Resolution at Hz)" data-maxResolution></span>
+      <span class="value" data-getJsonValue="Refresh Rate (Max.) [Hz]" data-maxResolution></span>
     </span>
   </div>
   <div class="key_3">
@@ -187,8 +187,8 @@
 
           let displayValue = targetValue;
           if (element.hasAttribute('data-maxResolution')) {
-            const hzMatch = targetValue.toString().match(/\b\d+\s*Hz\b/i);
-            displayValue = hzMatch ? hzMatch[0] : '';
+            const valStr = targetValue.toString().trim();
+            displayValue = valStr ? (/hz$/i.test(valStr) ? valStr : valStr + 'Hz') : '';
           }
           if (element.hasAttribute('data-remove-min-type')) {
             displayValue = displayValue
