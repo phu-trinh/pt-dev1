@@ -40,7 +40,7 @@
       <span
         class="value"
         {% unless product.metafields.custom.displayport != blank %}
-          data-getJsonValue="DisplayPort" data-YESNO
+          data-getJsonValue="DisplayPort" data-displayportyesno
         {% endunless %}
       >
         {%- if product.metafields.custom.displayport %}{{ product.metafields.custom.displayport.value }}{% endif -%}
@@ -239,6 +239,38 @@
             } else if (valStr.trim() !== '' && !valStr.includes('no')) {
               element.style.display = '';
               element.textContent = 'HDMI';
+            } else {
+              element.style.display = 'none';
+              element.textContent = '';
+            }
+          } else {
+            element.style.display = 'none';
+            element.textContent = '';
+          }
+          return;
+        }
+
+        if (element.hasAttribute('data-displayportyesno')) {
+          if (targetValue !== undefined && targetValue !== null) {
+            const valStr = targetValue.toString().toLowerCase();
+            const countMatch =
+              valStr.match(/([2-5])\s*(?:ea|ae)/i) ||
+              valStr.match(/\(\s*([2-5])\s*\)/) ||
+              valStr.match(/^\s*([2-5])\s*$/);
+            if (countMatch) {
+              element.style.display = '';
+              element.textContent = `DisplayPort x${countMatch[1]}`;
+            } else if (
+              valStr.includes('yes') ||
+              valStr.includes('1ea') ||
+              valStr.includes('1ae') ||
+              /\b1\b/.test(valStr)
+            ) {
+              element.style.display = '';
+              element.textContent = 'DisplayPort';
+            } else if (valStr.trim() !== '' && !valStr.includes('no')) {
+              element.style.display = '';
+              element.textContent = 'DisplayPort';
             } else {
               element.style.display = 'none';
               element.textContent = '';
