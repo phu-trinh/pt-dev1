@@ -19,7 +19,6 @@
   <div class="key_3_1">
     <span class="heading">Color Gamut</span>
     <span>
-      <span class="value" data-getJsonValue="Color Gamut (Min.)" data-remove-min-type></span>
       <span class="value" data-getJsonValue="Color Gamut (Typ.)" data-remove-min-type></span>
     </span>
   </div>
@@ -197,22 +196,26 @@
             displayValue = valStr ? (/hz$/i.test(valStr) ? valStr : valStr + 'Hz') : '';
           }
           if (element.hasAttribute('data-remove-min-type')) {
-            displayValue = displayValue
+            const stripped = displayValue
               .toString()
               .replace(/\s*\([^)]*\)/g, '')
               .trim();
+            displayValue = stripped ? stripped + ' (Typ.)' : '';
           }
           target.textContent = displayValue;
         }
       });
 
-      // Show/hide .key_3_1 based on whether Color Gamut (Min.) has a value
-      const colorGamutVal =
+      // Show/hide .key_3_1 based on whether Color Gamut (Min.) or (Typ.) has a value
+      const colorGamutMinVal =
         specMap['colorgamutmin'] !== undefined ? specMap['colorgamutmin'] : specMap['color gamut (min.)'];
+      const colorGamutTypVal =
+        specMap['colorgamuttyp'] !== undefined ? specMap['colorgamuttyp'] : specMap['color gamut (typ.)'];
       const key31El = document.querySelector('.key_3_1');
       if (key31El) {
         const hasColorGamut =
-          colorGamutVal !== undefined && colorGamutVal !== null && colorGamutVal.toString().trim() !== '';
+          (colorGamutMinVal !== undefined && colorGamutMinVal !== null && colorGamutMinVal.toString().trim() !== '') ||
+          (colorGamutTypVal !== undefined && colorGamutTypVal !== null && colorGamutTypVal.toString().trim() !== '');
         key31El.style.display = hasColorGamut ? '' : 'none';
       }
 
