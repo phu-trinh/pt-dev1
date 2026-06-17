@@ -120,15 +120,12 @@
 {% endstyle %}
 
 <script>
-  console.log(123);
   (function () {
     const productJsonEl = document.getElementById('productJson');
-    console.log('HDMI Debug: #productJson =', productJsonEl);
     if (!productJsonEl) return;
 
     try {
       const rawText = productJsonEl.textContent.trim();
-      console.log('HDMI Debug: rawText =', rawText);
       if (!rawText) return;
 
       let data = JSON.parse(rawText);
@@ -137,20 +134,40 @@
       }
 
       if (!data) return;
+      console.log('spec data:', data);
 
       // Flatten spec data to map normalized keys to values
       const specMap = {};
-      function traverse(obj) {
+      const priorityMap = {};
+
+      const getPriority = (path) => {
+        const lowerPath = path.toLowerCase();
+        if (lowerPath.includes('connectivity')) return 10;
+        if (lowerPath.includes('display')) return 5;
+        if (lowerPath.includes('accessory')) return 1;
+        return 2; // default priority
+      };
+
+      function traverse(obj, path = '') {
         if (obj && typeof obj === 'object') {
           for (const key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
               const val = obj[key];
               if (val && typeof val === 'object') {
-                traverse(val);
+                traverse(val, path ? path + '.' + key : key);
               } else {
                 const normalized = key.toLowerCase().replace(/[^a-z0-9]/g, '');
-                specMap[normalized] = val;
-                specMap[key.toLowerCase()] = val;
+                const lowerKey = key.toLowerCase();
+                const priority = getPriority(path);
+
+                if (specMap[normalized] === undefined || priority > (priorityMap[normalized] || 0)) {
+                  specMap[normalized] = val;
+                  priorityMap[normalized] = priority;
+                }
+                if (specMap[lowerKey] === undefined || priority > (priorityMap[lowerKey] || 0)) {
+                  specMap[lowerKey] = val;
+                  priorityMap[lowerKey] = priority;
+                }
               }
             }
           }
@@ -161,7 +178,6 @@
       // Populate elements with data-getJsonValue
       document.querySelectorAll('[data-getJsonValue]').forEach((element) => {
         const attrValue = element.getAttribute('data-getJsonValue');
-        console.log('HDMI Debug: found element =', attrValue, element);
         if (!attrValue) return;
 
         const normalizedAttr = attrValue.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -202,11 +218,7 @@
         }
 
         if (element.hasAttribute('data-hdmiyesno')) {
-          console.log('HDMI Debug:', {
-            element,
-            targetValue,
-            specMap,
-          });
+          console.log('HDMI targetValue:', targetValue);
           if (targetValue !== undefined && targetValue !== null) {
             const valStr = targetValue.toString().toLowerCase();
             const countMatch =
