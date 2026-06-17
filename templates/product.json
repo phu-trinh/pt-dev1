@@ -116,6 +116,7 @@
                 "text_xrnftG": {
                   "type": "text",
                   "name": "Product title",
+                  "disabled": true,
                   "settings": {
                     "text": "<h1>{{ closest.product.title }}</h1>",
                     "width": "100%",
