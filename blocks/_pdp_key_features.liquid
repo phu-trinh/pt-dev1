@@ -191,6 +191,8 @@
           } else if (attrValue === 'Size [cm]') {
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (valStr.toLowerCase().includes('cm') ? valStr : valStr + ' cm') : '';
+          } else if (attrValue === 'Display Position Adjustments') {
+            displayValue = targetValue.toString().replace(/\s*\/\s*/g, ' / ').trim();
           } else if (element.hasAttribute('data-maxResolution')) {
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (/hz$/i.test(valStr) ? valStr : valStr + 'Hz') : '';
