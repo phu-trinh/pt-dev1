@@ -1,10 +1,10 @@
 <div class="pdp-key-features">
   <div class="key_1">
     <span class="heading">Size [Inch] / Size [cm]</span>
-    <span
-      ><span class="value" data-getJsonValue="Size [Inch]"></span>" /
-      <span class="value" data-getJsonValue="Size [cm]"></span
-    ></span>
+    <span>
+      <span class="value" data-getJsonValue="Size [Inch]"></span> /
+      <span class="value" data-getJsonValue="Size [cm]"></span>
+    </span>
   </div>
   <div class="key_2">
     <span class="heading">Resolution</span>
@@ -186,7 +186,13 @@
               : element.querySelector('.value') || element;
 
           let displayValue = targetValue;
-          if (element.hasAttribute('data-maxResolution')) {
+          if (attrValue === 'Size [Inch]') {
+            const valStr = targetValue.toString().trim();
+            displayValue = valStr ? (valStr.includes('"') ? valStr : valStr + '"') : '';
+          } else if (attrValue === 'Size [cm]') {
+            const valStr = targetValue.toString().trim();
+            displayValue = valStr ? (valStr.toLowerCase().includes('cm') ? valStr : valStr + ' cm') : '';
+          } else if (element.hasAttribute('data-maxResolution')) {
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (/hz$/i.test(valStr) ? valStr : valStr + 'Hz') : '';
           }
