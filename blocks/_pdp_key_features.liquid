@@ -30,7 +30,7 @@
     <span class="heading">Ports</span>
     <span class="key5_data">
       <span
-        class="value 111"
+        class="value"
         {% unless product.metafields.custom.hdmi != blank %}
           data-getJsonValue="HDMI" data-hdmiyesno
         {% endunless %}
@@ -200,7 +200,10 @@
         if (element.hasAttribute('data-hdmiyesno')) {
           if (targetValue !== undefined && targetValue !== null) {
             const valStr = targetValue.toString().toLowerCase();
-            const countMatch = valStr.match(/([2-5])\s*(?:ea|ae)/i) || valStr.match(/\b([2-5])\b/);
+             const countMatch =
+               valStr.match(/([2-5])\s*(?:ea|ae)/i) ||
+               valStr.match(/\(\s*([2-5])\s*\)/) ||
+               valStr.match(/^\s*([2-5])\s*$/);
             if (countMatch) {
               element.style.display = '';
               element.textContent = `HDMI x${countMatch[1]}`;
