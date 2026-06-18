@@ -1,0 +1,99 @@
+<div class="pdp-key-features {{ product.type | handleize }}">
+  <div class="key_1">
+    <span class="heading">Size [Inch] / Size [cm]</span>
+    <span>
+      <span class="value" data-getJsonValue="Size [Inch]"></span> /
+      <span class="value" data-getJsonValue="Size [cm]"></span>
+    </span>
+  </div>
+  <div class="key_2">
+    <span class="heading">Resolution + Refresh Rate (Max.)</span>
+    <span>
+      <span class="value" data-getJsonValue="Resolution"></span>
+      <span class="value" data-getJsonValue="Refresh Rate (Max.) [Hz]" data-maxResolution></span>
+    </span>
+  </div>
+  <div class="key_3">
+    <span class="heading">Panel Type</span><span class="value" data-getJsonValue="Panel Type"></span>
+  </div>
+  <div class="key_3_1">
+    <span class="heading">Color Gamut</span>
+    <span>
+      <span class="value" data-getJsonValue="Color Gamut (Typ.)" data-remove-min-type></span>
+    </span>
+  </div>
+  <div class="key_4">
+    <span class="heading">Display Position Adjustments</span
+    ><span class="value" data-getJsonValue="Display Position Adjustments"></span>
+  </div>
+  <div class="key_5" data-getJsonValue="Dimensions">
+    <span class="heading">Ports</span>
+    <span class="key5_data">
+      <span
+        class="value"
+        {% unless product.metafields.custom.hdmi != blank %}
+          data-getJsonValue="HDMI" data-text="HDMI" data-hdmiyesno
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.hdmi %}{{ product.metafields.custom.hdmi.value }}{% endif -%}
+      </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.displayport != blank %}
+          data-getJsonValue="DisplayPort" data-text="Display Port" data-hdmiyesno
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.displayport %}{{ product.metafields.custom.displayport.value }}{% endif -%}
+      </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.thunderbolt != blank %}
+          data-getJsonValue="Thunderbolt" data-text="Thunderbolt" data-hdmiyesno
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.thunderbolt %}{{ product.metafields.custom.thunderbolt.value }}{% endif -%}
+      </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.usb_c != blank %}
+          data-getJsonValue="USB-C" data-text="USB-C" data-hdmiyesno
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.usb_c %}{{ product.metafields.custom.usb_c.value }}{% endif -%}
+      </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.usb_upstream_port != blank %}
+          data-getJsonValue="USB Upstream Port" data-text="USB Upstream Port" data-hdmiyesno
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.usb_upstream_port -%}
+          {{- product.metafields.custom.usb_upstream_port.value -}}
+        {%- endif -%}
+      </span>
+      <span
+        class="value"
+        {% unless product.metafields.custom.usb_downstream_port != blank %}
+          data-getJsonValue="USB Downstream Port" data-text="USB Downstream Port" data-hdmiyesno
+        {% endunless %}
+      >
+        {%- if product.metafields.custom.usb_downstream_port -%}
+          {{- product.metafields.custom.usb_downstream_port.value -}}
+        {%- endif -%}
+      </span>
+      <span class="value" data-getJsonValue="D-Sub" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="LAN (RJ-45)" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="Daisy Chain" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="Bulit-in KVM" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="DVI-D" data-sw-yesno></span>
+    </span>
+  </div>
+  <div class="key_6">
+    <span class="heading">SW APPLICATION</span>
+    <span>
+      <span class="value" data-getJsonValue="LG Switch" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="Dual Controller" data-sw-yesno></span>
+    </span>
+  </div>
+</div>
