@@ -205,6 +205,7 @@
     const secondPopup = document.querySelector('.iframe-submit .second-popup');
     const equolaWrapper = document.querySelector('.iframe-submit .equola-form-wrapper');
     const drawerCloseBtn = document.querySelector('.iframe-submit .drawer-close-btn');
+    const iframe = document.querySelector('.iframe-submit .equola-form-wrapper iframe');
 
     function openDrawer() {
       if (secondPopup && equolaWrapper) {
@@ -233,6 +234,12 @@
       if (e.key === 'Escape') {
         closeDrawer();
       }
+    });
+
+    // Capture response messages sent by the iframe on form submit
+    window.addEventListener('message', function (event) {
+      console.log('Iframe submit result:', event.data);
+      closeDrawer();
     });
   });
 </script>
