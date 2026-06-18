@@ -1,20 +1,18 @@
 <div class="iframe-submit">
-  <button type="button" class="main-trigger-btn">Click to show a popup with a button that opens a bottom popup with Equola form</button>
+  <p class="iframe-submit-desc">
+    Click the button below to display the interactive Iframe submission form in a sleek bottom panel.
+  </p>
+  <button type="button" class="popup-action-btn">Iframe form popup</button>
 
-  <div class="first-popup">
-    <div>
-      <button class="popup-close-btn" type="button" aria-label="Close modal">&times;</button>
-      <h3 class="popup-title">Equola Integration</h3>
-      <p class="popup-desc">Click the button below to display the interactive Equola submission form in a sleek bottom panel.</p>
-      <button type="button" class="popup-action-btn">Show bottom popup with Equola form</button>
-    </div>
-  </div>
   <div class="second-popup"></div>
 
   <div class="equola-form-wrapper">
     <div class="drag-handle"></div>
-    <div class="equola-form-header">
-      <span class="equola-form-title">Equola Submission Portal</span>
+    <div class="modal-title">
+      <div class="mt-wrap">
+        <h1 class="inquiry-headline">Please fill out the form below</h1>
+        <p>The catalog will then be sent to you via email</p>
+      </div>
       <button type="button" class="drawer-close-btn" aria-label="Close drawer">&times;</button>
     </div>
     <iframe src="{{ section.settings.iframe_src }}" title="Equola form"></iframe>
@@ -25,9 +23,19 @@
   .iframe-submit {
     padding: 3rem 1rem;
     text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
   }
-  
-  .iframe-submit .main-trigger-btn {
+
+  .iframe-submit .iframe-submit-desc {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555555;
+    margin-bottom: 2rem;
+    font-family: inherit;
+  }
+
+  .iframe-submit .popup-action-btn {
     background: linear-gradient(135deg, #a50034 0%, #e60050 100%);
     color: #ffffff;
     border: none;
@@ -39,123 +47,19 @@
     box-shadow: 0 8px 20px rgba(165, 0, 52, 0.3);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: inherit;
+    display: inline-block;
   }
-  
-  .iframe-submit .main-trigger-btn:hover {
+
+  .iframe-submit .popup-action-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 28px rgba(165, 0, 52, 0.5);
     filter: brightness(1.1);
   }
-  
-  .iframe-submit .main-trigger-btn:active {
+
+  .iframe-submit .popup-action-btn:active {
     transform: translateY(-1px);
   }
-  
-  /* First Popup Backdrop */
-  .iframe-submit .first-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 99999;
-  }
-  
-  .iframe-submit .first-popup.is-active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  /* First Popup Dialog Content */
-  .iframe-submit .first-popup > div {
-    background: #ffffff;
-    color: #333333;
-    padding: 3rem 2rem;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-    transform: scale(0.9) translateY(20px);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    max-width: 450px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-    box-sizing: border-box;
-  }
-  
-  .iframe-submit .first-popup.is-active > div {
-    transform: scale(1) translateY(0);
-  }
-  
-  .iframe-submit .popup-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0 0 1rem 0;
-    color: #111111;
-    letter-spacing: -0.5px;
-  }
-  
-  .iframe-submit .popup-desc {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #666666;
-    margin: 0 0 2rem 0;
-  }
-  
-  .iframe-submit .popup-action-btn {
-    background: #111111;
-    color: #ffffff;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
-  }
-  
-  .iframe-submit .popup-action-btn:hover {
-    background: #e60050;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(230, 0, 80, 0.3);
-  }
-  
-  .iframe-submit .popup-close-btn {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #f5f5f5;
-    border: none;
-    font-size: 1.25rem;
-    font-weight: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #666666;
-    padding: 0;
-    line-height: 1;
-  }
-  
-  .iframe-submit .popup-close-btn:hover {
-    background: #e60050;
-    color: #ffffff;
-    transform: rotate(90deg);
-  }
-  
+
   /* Second Popup Backdrop (for drawer) */
   .iframe-submit .second-popup {
     position: fixed;
@@ -171,12 +75,12 @@
     transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 999998; /* Under the drawer which is 999999 */
   }
-  
+
   .iframe-submit .second-popup.is-active {
     opacity: 1;
     pointer-events: auto;
   }
-  
+
   /* Equola Form Wrapper (Bottom Drawer) */
   .iframe-submit .equola-form-wrapper {
     position: fixed;
@@ -196,69 +100,77 @@
     overflow: hidden;
     box-sizing: border-box;
   }
-  
+
   .iframe-submit .equola-form-wrapper.is-active {
     transform: translate(-50%, 0);
   }
-  
+
   .iframe-submit .drag-handle {
     width: 40px;
     height: 4px;
-    background-color: #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.4);
     border-radius: 2px;
     margin: 10px auto 0 auto;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
     flex-shrink: 0;
   }
-  
-  .iframe-submit .equola-form-header {
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f0f0f0;
-    background: #ffffff;
+
+  /* Modal Title with background image */
+  .iframe-submit .modal-title {
+    background-image: url('https://digital-showroom.lge.com/images/myCatalog/bg_inquiry.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    color: #ffffff;
     flex-shrink: 0;
   }
-  
-  .iframe-submit .equola-form-title {
+
+  .iframe-submit .modal-title .inquiry-headline {
+    font-size: 1.8rem;
     font-weight: 700;
-    font-size: 1.15rem;
-    color: #111111;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #ffffff;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.5px;
   }
-  
-  .iframe-submit .equola-form-title::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #e60050;
-    border-radius: 50%;
+
+  .iframe-submit .modal-title p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
   }
-  
-  .iframe-submit .drawer-close-btn {
-    background: none;
+
+  .iframe-submit .modal-title .drawer-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #999999;
+    color: #ffffff;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     padding: 0;
+    backdrop-filter: blur(4px);
   }
-  
-  .iframe-submit .drawer-close-btn:hover {
-    background: #f5f5f5;
-    color: #333333;
+
+  .iframe-submit .modal-title .drawer-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
   }
-  
+
   .iframe-submit .equola-form-wrapper iframe {
     width: 100%;
     height: 100%;
@@ -266,80 +178,63 @@
     flex-grow: 1;
     background: #ffffff;
   }
-  
+
   @media (max-width: 768px) {
     .iframe-submit .equola-form-wrapper {
       height: 90vh;
       border-radius: 20px 20px 0 0;
     }
+
+    .iframe-submit .modal-title {
+      padding: 2.5rem 1.5rem 2rem;
+    }
+
+    .iframe-submit .modal-title .inquiry-headline {
+      font-size: 1.4rem;
+    }
+
+    .iframe-submit .modal-title p {
+      font-size: 0.9rem;
+    }
   }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const mainBtn = document.querySelector('.iframe-submit .main-trigger-btn');
-  const firstPopup = document.querySelector('.iframe-submit .first-popup');
-  const firstPopupClose = document.querySelector('.iframe-submit .popup-close-btn');
-  const actionBtn = document.querySelector('.iframe-submit .popup-action-btn');
-  const secondPopup = document.querySelector('.iframe-submit .second-popup');
-  const equolaWrapper = document.querySelector('.iframe-submit .equola-form-wrapper');
-  const drawerCloseBtn = document.querySelector('.iframe-submit .drawer-close-btn');
+  document.addEventListener('DOMContentLoaded', function () {
+    const actionBtn = document.querySelector('.iframe-submit .popup-action-btn');
+    const secondPopup = document.querySelector('.iframe-submit .second-popup');
+    const equolaWrapper = document.querySelector('.iframe-submit .equola-form-wrapper');
+    const drawerCloseBtn = document.querySelector('.iframe-submit .drawer-close-btn');
 
-  function openFirstPopup() {
-    if (firstPopup) {
-      firstPopup.classList.add('is-active');
-      document.body.style.overflow = 'hidden';
+    function openDrawer() {
+      if (secondPopup && equolaWrapper) {
+        secondPopup.classList.add('is-active');
+        equolaWrapper.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+      }
     }
-  }
 
-  function closeFirstPopup() {
-    if (firstPopup) {
-      firstPopup.classList.remove('is-active');
+    function closeDrawer() {
+      if (secondPopup && equolaWrapper) {
+        secondPopup.classList.remove('is-active');
+        equolaWrapper.classList.remove('is-active');
+      }
       document.body.style.overflow = '';
     }
-  }
 
-  function openDrawer() {
-    closeFirstPopup();
-    if (secondPopup && equolaWrapper) {
-      secondPopup.classList.add('is-active');
-      equolaWrapper.classList.add('is-active');
-      document.body.style.overflow = 'hidden';
+    if (actionBtn) actionBtn.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+
+    if (secondPopup) {
+      secondPopup.addEventListener('click', closeDrawer);
     }
-  }
 
-  function closeDrawer() {
-    if (secondPopup && equolaWrapper) {
-      secondPopup.classList.remove('is-active');
-      equolaWrapper.classList.remove('is-active');
-    }
-    document.body.style.overflow = '';
-  }
-
-  if (mainBtn) mainBtn.addEventListener('click', openFirstPopup);
-  if (firstPopupClose) firstPopupClose.addEventListener('click', closeFirstPopup);
-  if (actionBtn) actionBtn.addEventListener('click', openDrawer);
-  if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
-
-  if (firstPopup) {
-    firstPopup.addEventListener('click', function(e) {
-      if (e.target === firstPopup) {
-        closeFirstPopup();
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeDrawer();
       }
     });
-  }
-
-  if (secondPopup) {
-    secondPopup.addEventListener('click', closeDrawer);
-  }
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closeFirstPopup();
-      closeDrawer();
-    }
   });
-});
 </script>
 
 {% schema %}
