@@ -1,98 +1,69 @@
 <div class="pdp-key-features {{ product.type | handleize }}">
-  <div class="key_1">
+  <div class="key_1" data-laptops-type1>
     <span class="heading">Operating System</span>
     <span>
       <span class="value" data-getJsonValue="Operating System"></span>
     </span>
   </div>
-  <div class="key_2">
+  <div class="key_2" data-laptops-type1>
+    <span class="heading">Processor</span>
+    <span>
+      <span class="value" data-getJsonValue="Processor"></span>
+    </span>
+  </div>
+  <div class="key_3" data-laptops-type1>
+    <span class="heading">Graphics Card</span><span class="value" data-getJsonValue="Graphic"></span>
+  </div>
+  <div class="key_4" data-laptops-type1>
+    <span class="heading">Size & Resolution</span>
+    <span>
+      <span class="value" data-getJsonValue="Size [Inch]"></span>
+      <span class="value" data-getJsonValue="Resolution"></span>
+    </span>
+  </div>
+  <div class="key_5" data-laptops-type1>
+    <span class="heading">Memory</span><span class="value" data-getJsonValue="Memory"></span>
+  </div>
+  <div class="key_6" data-laptops-type1>
+    <span class="heading">Storage</span><span class="value" data-getJsonValue="Storage"></span>
+  </div>
+
+  <div class="key_7" data-laptops-type2>
+    <span class="heading">Size [Inch] / Size [cm]</span>
+    <span>
+      <span class="value" data-getJsonValue="Size [Inch]"></span> /
+      <span class="value" data-getJsonValue="Size [cm]"></span>
+    </span>
+  </div>
+  <div class="key_8" data-laptops-type2>
     <span class="heading">Resolution + Refresh Rate (Max.)</span>
     <span>
       <span class="value" data-getJsonValue="Resolution"></span>
-      <span class="value" data-getJsonValue="Refresh Rate (Max.) [Hz]" data-maxResolution></span>
     </span>
   </div>
-  <div class="key_3">
-    <span class="heading">Panel Type</span><span class="value" data-getJsonValue="Panel Type"></span>
-  </div>
-  <div class="key_3_1">
-    <span class="heading">Color Gamut</span>
+  <div class="key_9" data-laptops-type2>
+    <span class="heading">Panel Type</span>
     <span>
-      <span class="value" data-getJsonValue="Color Gamut (Typ.)" data-remove-min-type></span>
+      <span class="value" data-getJsonValue="Panel Type"></span>
     </span>
   </div>
-  <div class="key_4">
-    <span class="heading">Display Position Adjustments</span
-    ><span class="value" data-getJsonValue="Display Position Adjustments"></span>
+  <div class="key_10" data-laptops-type2>
+    <span class="heading">Color Gamut (Typ.) </span>
+    <span>
+      <span class="value" data-getJsonValue="Color gamut"></span>
+    </span>
   </div>
-  <div class="key_5" data-getJsonValue="Dimensions">
+  <div class="key_11" data-laptops-type2>
     <span class="heading">Ports</span>
-    <span class="key5_data">
-      <span
-        class="value"
-        {% unless product.metafields.custom.hdmi != blank %}
-          data-getJsonValue="HDMI" data-text="HDMI" data-hdmiyesno
-        {% endunless %}
-      >
-        {%- if product.metafields.custom.hdmi %}{{ product.metafields.custom.hdmi.value }}{% endif -%}
-      </span>
-      <span
-        class="value"
-        {% unless product.metafields.custom.displayport != blank %}
-          data-getJsonValue="DisplayPort" data-text="Display Port" data-hdmiyesno
-        {% endunless %}
-      >
-        {%- if product.metafields.custom.displayport %}{{ product.metafields.custom.displayport.value }}{% endif -%}
-      </span>
-      <span
-        class="value"
-        {% unless product.metafields.custom.thunderbolt != blank %}
-          data-getJsonValue="Thunderbolt" data-text="Thunderbolt" data-hdmiyesno
-        {% endunless %}
-      >
-        {%- if product.metafields.custom.thunderbolt %}{{ product.metafields.custom.thunderbolt.value }}{% endif -%}
-      </span>
-      <span
-        class="value"
-        {% unless product.metafields.custom.usb_c != blank %}
-          data-getJsonValue="USB-C" data-text="USB-C" data-hdmiyesno
-        {% endunless %}
-      >
-        {%- if product.metafields.custom.usb_c %}{{ product.metafields.custom.usb_c.value }}{% endif -%}
-      </span>
-      <span
-        class="value"
-        {% unless product.metafields.custom.usb_upstream_port != blank %}
-          data-getJsonValue="USB Upstream Port" data-text="USB Upstream Port" data-hdmiyesno
-        {% endunless %}
-      >
-        {%- if product.metafields.custom.usb_upstream_port -%}
-          {{- product.metafields.custom.usb_upstream_port.value -}}
-        {%- endif -%}
-      </span>
-      <span
-        class="value"
-        {% unless product.metafields.custom.usb_downstream_port != blank %}
-          data-getJsonValue="USB Downstream Port" data-text="USB Downstream Port" data-hdmiyesno
-        {% endunless %}
-      >
-        {%- if product.metafields.custom.usb_downstream_port -%}
-          {{- product.metafields.custom.usb_downstream_port.value -}}
-        {%- endif -%}
-      </span>
-      <span class="value" data-getJsonValue="D-Sub" data-sw-yesno></span>
-      <span class="value" data-getJsonValue="LAN (RJ-45)" data-sw-yesno></span>
-      <span class="value" data-getJsonValue="Daisy Chain" data-sw-yesno></span>
-      <span class="value" data-getJsonValue="Bulit-in KVM" data-sw-yesno></span>
-      <span class="value" data-getJsonValue="DVI-D" data-sw-yesno></span>
+    <span class="key11_data">
+      <span class="value" data-getJsonValue="HDMI" data-mdmicode></span>
+      <span class="value" data-getJsonValue="USB Type C" data-mdmicode></span>
     </span>
   </div>
-  <div class="key_6">
-    <span class="heading">SW APPLICATION</span>
+  <div class="key_12" data-laptops-type2>
+    <span class="heading">Accessory</span>
     <span>
-      <span class="value" data-getJsonValue="LG Switch" data-sw-yesno></span>
-      <span class="value" data-getJsonValue="LG Calibration Studio (True Color Pro)" data-sw-yesno></span>
-      <span class="value" data-getJsonValue="Dual Controller" data-sw-yesno></span>
+      <span class="value" data-getJsonValue="Accessory"></span>
     </span>
   </div>
 </div>
@@ -153,14 +124,29 @@
       }
       traverse(data);
 
+      const container = document.querySelector('.pdp-key-features.laptops') || document;
+
       // Populate elements with data-getJsonValue
-      document.querySelectorAll('[data-getJsonValue]').forEach((element) => {
+      container.querySelectorAll('[data-getJsonValue]').forEach((element) => {
         const attrValue = element.getAttribute('data-getJsonValue');
         if (!attrValue) return;
 
         const normalizedAttr = attrValue.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const targetValue =
+        let targetValue =
           specMap[normalizedAttr] !== undefined ? specMap[normalizedAttr] : specMap[attrValue.toLowerCase()];
+
+        // Add robust fallback mappings for common laptop spec keys
+        if (targetValue === undefined) {
+          if (normalizedAttr === 'storage') {
+            targetValue = specMap['ssd'] || specMap['storage'] || specMap['storagecapacity'] || specMap['hdd'];
+          } else if (normalizedAttr === 'graphic') {
+            targetValue = specMap['graphics'] || specMap['gpu'] || specMap['graphicscard'];
+          } else if (normalizedAttr === 'memory') {
+            targetValue = specMap['ram'] || specMap['systemmemory'];
+          } else if (normalizedAttr === 'operatingsystem') {
+            targetValue = specMap['os'] || specMap['operatingsystemos'];
+          }
+        }
 
         if (element.hasAttribute('data-YESNO')) {
           if (targetValue !== undefined && targetValue !== null) {
@@ -299,11 +285,17 @@
 
           let displayValue = targetValue;
           if (attrValue === 'Size [Inch]') {
-            const valStr = targetValue.toString().trim();
-            displayValue = valStr ? (valStr.includes('"') ? valStr : valStr + '"') : '';
+            let valStr = targetValue.toString().trim();
+            valStr = valStr
+              .replace(/-?\s*inch(es)?/gi, '')
+              .replace(/"/g, '')
+              .trim();
+            displayValue = valStr ? valStr + '"' : '';
           } else if (attrValue === 'Size [cm]') {
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (valStr.toLowerCase().includes('cm') ? valStr : valStr + ' cm') : '';
+          } else if (attrValue === 'Resolution') {
+            displayValue = targetValue.toString().replace(/\s*\*\s*/g, ' x ');
           } else if (attrValue === 'Display Position Adjustments') {
             displayValue = targetValue
               .toString()
@@ -312,6 +304,47 @@
           } else if (element.hasAttribute('data-maxResolution')) {
             const valStr = targetValue.toString().trim();
             displayValue = valStr ? (/hz$/i.test(valStr) ? valStr : valStr + 'Hz') : '';
+          } else if (attrValue.toLowerCase() === 'color gamut') {
+            displayValue = targetValue.toString().replace(/Typical/gi, 'Typ');
+          } else if (element.hasAttribute('data-mdmicode')) {
+            let valStr = targetValue.toString().trim();
+            if (/hdmi\s*\(mini-hdmi\s*port\)/i.test(valStr)) {
+              displayValue = '1x mini-HDMI';
+            } else {
+              let count = 1;
+              const countMatch = valStr.match(/\(\s*[xX]?(\d+)\s*(?:ea|ae)?\s*,/i) || valStr.match(/\(\s*(\d+)\s*(?:ea|ae)\s*,/i) || valStr.match(/\(\s*[xX]?(\d+)\s*(?:ea|ae)?\s*\)/i);
+              if (countMatch) {
+                count = parseInt(countMatch[1], 10);
+              }
+              
+              const parenMatch = valStr.match(/^([^(]+)\s*\(([^)]+)\)/);
+              if (parenMatch) {
+                let mainPart = parenMatch[1].trim();
+                let insideParen = parenMatch[2].trim();
+                
+                // clean up the count part from insideParen
+                insideParen = insideParen.replace(/^[xX]?\d+\s*(?:ea|ae)?\s*,\s*/i, '')
+                                         .replace(/^[xX]?\d+\s*(?:ea|ae)?\s*$/i, '')
+                                         .trim();
+                
+                mainPart = mainPart.replace(/Gen(\d+)x\d+/gi, 'Gen$1')
+                                   .replace(/Type\s+C/gi, 'Type-C');
+                                   
+                let connector = ' ';
+                if (insideParen && !insideParen.toLowerCase().startsWith('with')) {
+                  connector = ' with ';
+                }
+                
+                const countPrefix = count > 1 ? `${count} x ` : '';
+                displayValue = insideParen ? `${countPrefix}${mainPart}${connector}${insideParen}` : `${countPrefix}${mainPart}`;
+              } else {
+                displayValue = valStr.replace(/Gen(\d+)x\d+/gi, 'Gen$1')
+                                     .replace(/Type\s+C/gi, 'Type-C');
+                if (count > 1) {
+                  displayValue = `${count} x ${displayValue}`;
+                }
+              }
+            }
           }
           if (element.hasAttribute('data-remove-min-type')) {
             const stripped = displayValue
@@ -325,7 +358,7 @@
       });
 
       // Format commas for .key5_data elements
-      const portElements = Array.from(document.querySelectorAll('.key5_data .value')).filter(
+      const portElements = Array.from(container.querySelectorAll('.key5_data .value')).filter(
         (el) => el.style.display !== 'none' && el.textContent.trim() !== ''
       );
       portElements.forEach((el, index) => {
@@ -338,7 +371,7 @@
       });
 
       // Format commas for .key_6 elements
-      const swElements = Array.from(document.querySelectorAll('.key_6 .value')).filter(
+      const swElements = Array.from(container.querySelectorAll('.key_6 .value')).filter(
         (el) => el.style.display !== 'none' && el.textContent.trim() !== ''
       );
       swElements.forEach((el, index) => {
@@ -350,12 +383,25 @@
         }
       });
 
+      // Format commas for .key11_data elements
+      const key11Elements = Array.from(container.querySelectorAll('.key11_data .value')).filter(
+        (el) => el.style.display !== 'none' && el.textContent.trim() !== ''
+      );
+      key11Elements.forEach((el, index) => {
+        let text = el.textContent.replace(/,\s*$/, '').trim();
+        if (index < key11Elements.length - 1) {
+          el.textContent = text + ', ';
+        } else {
+          el.textContent = text;
+        }
+      });
+
       // Show/hide .key_3_1 based on whether Color Gamut (Min.) or (Typ.) has a value
       const colorGamutMinVal =
         specMap['colorgamutmin'] !== undefined ? specMap['colorgamutmin'] : specMap['color gamut (min.)'];
       const colorGamutTypVal =
         specMap['colorgamuttyp'] !== undefined ? specMap['colorgamuttyp'] : specMap['color gamut (typ.)'];
-      const key31El = document.querySelector('.key_3_1');
+      const key31El = container.querySelector('.key_3_1');
       if (key31El) {
         const hasColorGamut =
           (colorGamutMinVal !== undefined && colorGamutMinVal !== null && colorGamutMinVal.toString().trim() !== '') ||
@@ -364,7 +410,7 @@
       }
 
       // Show/hide .key_6 based on whether it has any visible populated value
-      const key6El = document.querySelector('.key_6');
+      const key6El = container.querySelector('.key_6');
       if (key6El) {
         let hasValue = false;
         key6El.querySelectorAll('[data-getJsonValue]').forEach((el) => {
@@ -375,6 +421,35 @@
         // Show .key_6 when it has value, hide when it doesn't
         key6El.style.display = hasValue ? '' : 'none';
       }
+
+      // Show/hide .key_11 based on whether it has any visible populated value
+      const key11El = container.querySelector('.key_11');
+      if (key11El) {
+        let hasValue = false;
+        key11El.querySelectorAll('[data-getJsonValue]').forEach((el) => {
+          if (el.style.display !== 'none' && el.textContent.trim() !== '') {
+            hasValue = true;
+          }
+        });
+        key11El.style.display = hasValue ? '' : 'none';
+      }
+
+      // Detect "Product Category" value to show/hide category layout types
+      const productCategoryVal = specMap['productcategory'] || specMap['product category'] || '';
+      const isType2 =
+        productCategoryVal.toString().toLowerCase().includes('gram') &&
+        productCategoryVal.toString().toLowerCase().includes('view');
+
+      container.querySelectorAll('[data-laptops-type1]').forEach((el) => {
+        if (isType2) {
+          el.style.setProperty('display', 'none', 'important');
+        }
+      });
+      container.querySelectorAll('[data-laptops-type2]').forEach((el) => {
+        if (!isType2) {
+          el.style.setProperty('display', 'none', 'important');
+        }
+      });
     } catch (e) {
       console.warn('Error parsing or processing key features JSON:', e);
     }
