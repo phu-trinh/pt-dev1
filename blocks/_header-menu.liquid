@@ -84,9 +84,22 @@
 
     {% capture children %}
       {% for link in block_settings.menu.links %}
+        {% assign found_customdropdown = false %}
+        {% assign customdropdownmenu = blank %}
+          {% case link.title %}
+            {% when block_settings.menu_name1 %}
+              {% assign found_customdropdown = true %}
+              {% assign customdropdownmenu = block_settings.menu_nav1 %}
+            {% when block_settings.menu_name2 %}
+              {% assign found_customdropdown = true %}
+              {% assign customdropdownmenu = block_settings.menu_nav2 %}
+            {% when block_settings.menu_name3 %}
+              {% assign found_customdropdown = true %}
+              {% assign customdropdownmenu = block_settings.menu_nav3 %}
+          {% endcase %}
         <li
           role="presentation"
-          class="menu-list__list-item"
+          class="menu-list__list-item {% if found_customdropdown == true %}custom-dropdown{% endif %}"
           on:focus="/activate"
           on:blur="/deactivate"
           on:pointerenter="/activate"
@@ -108,6 +121,48 @@
           >
             <span class="menu-list__link-title">{{- link.title -}}</span>
           </a>
+          
+          {% if found_customdropdown == true %}
+             <div class="custom-dropdown__menu-wrapper">
+                <ul class="custom-dropdown__list">
+                  {% for custom_link in customdropdownmenu.links %}
+                    <li class="custom-dropdown__item custom-dropdown__item--level-1">
+                      <a href="{{ custom_link.url }}" class="custom-dropdown__link">
+                        <span>{{ custom_link.title }}</span>
+                        {% if custom_link.links != blank %}
+                          <span class="custom-dropdown__icon">&rsaquo;</span>
+                        {% endif %}
+                      </a>
+                      {% if custom_link.links != blank %}
+                        <ul class="custom-dropdown__submenu custom-dropdown__submenu--level-2">
+                          {% for child_link in custom_link.links %}
+                            <li class="custom-dropdown__item custom-dropdown__item--level-2">
+                              <a href="{{ child_link.url }}" class="custom-dropdown__link">
+                                <span>{{ child_link.title }}</span>
+                                {% if child_link.links != blank %}
+                                  <span class="custom-dropdown__icon">&rsaquo;</span>
+                                {% endif %}
+                              </a>
+                              {% if child_link.links != blank %}
+                                <ul class="custom-dropdown__submenu custom-dropdown__submenu--level-3">
+                                  {% for grandchild_link in child_link.links %}
+                                    <li class="custom-dropdown__item custom-dropdown__item--level-3">
+                                      <a href="{{ grandchild_link.url }}" class="custom-dropdown__link">
+                                        <span>{{ grandchild_link.title }}</span>
+                                      </a>
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              {% endif %}
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+             </div>
+          {%  else  %}
           {%- if link.links != blank -%}
             <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">
               <div
@@ -137,6 +192,7 @@
               </div>
             </div>
           {%- endif -%}
+          {% endif %}
         </li>
       {% endfor %}
       <li
@@ -685,6 +741,138 @@
     /* preserves the inherited grid layout when this submenu wrapper is used */
     display: contents;
   }
+
+  /* Custom Dropdown Styling */
+  .menu-list__list-item.custom-dropdown {
+    position: relative;
+  }
+
+  .custom-dropdown__menu-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--color-submenu, #fff);
+    min-width: 220px;
+    z-index: var(--layer-header-menu, 100);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: var(--border-radius-sm, 6px);
+    padding: var(--padding-xs, 8px) 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  /* Show first level dropdown on hovering level 1 parent menu item */
+  .menu-list__list-item.custom-dropdown:hover > .custom-dropdown__menu-wrapper,
+  .menu-list__list-item.custom-dropdown:focus-within > .custom-dropdown__menu-wrapper {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .custom-dropdown__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .custom-dropdown__item {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .custom-dropdown__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: var(--menu-child-font-size, 14px);
+    font-family: var(--menu-child-font-family);
+    font-weight: var(--menu-child-font-weight);
+    line-height: var(--menu-child-font-line-height);
+    text-transform: var(--menu-child-font-case);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .custom-dropdown__link:hover {
+    background-color: rgba(var(--color-foreground-rgb), 0.05);
+    color: var(--menu-child-active-font-color);
+  }
+
+  .custom-dropdown__icon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    font-size: 1.2rem;
+    line-height: 1;
+    opacity: 0.6;
+    transition: transform 0.2s ease;
+  }
+
+  .custom-dropdown__item:hover > .custom-dropdown__link .custom-dropdown__icon {
+    transform: translateX(3px);
+    opacity: 1;
+  }
+
+  /* Level 2 Submenu Styling */
+  .custom-dropdown__submenu--level-2 {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: var(--color-submenu, #fff);
+    min-width: 220px;
+    z-index: 101;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: var(--border-radius-sm, 6px);
+    padding: var(--padding-xs, 8px) 0;
+    list-style: none;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  /* Show Level 2 Submenu on Level 1 Hover */
+  .custom-dropdown__item--level-1:hover > .custom-dropdown__submenu--level-2 {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  /* Level 3 Submenu Styling */
+  .custom-dropdown__submenu--level-3 {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: var(--color-submenu, #fff);
+    min-width: 220px;
+    z-index: 102;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: var(--border-radius-sm, 6px);
+    padding: var(--padding-xs, 8px) 0;
+    list-style: none;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  /* Show Level 3 Submenu on Level 2 Hover */
+  .custom-dropdown__item--level-2:hover > .custom-dropdown__submenu--level-3 {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -697,6 +885,48 @@
       "id": "menu",
       "label": "t:settings.menu",
       "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Sub Menu 1"
+    },
+    {
+      "type": "text",
+      "id": "menu_name1",
+      "label": "Target",
+    },
+    {
+      "type": "link_list",
+      "id": "menu_nav1",
+      "label": "Menu"
+    },
+    {
+      "type": "header",
+      "content": "Sub Menu 2"
+    },
+    {
+      "type": "text",
+      "id": "menu_name2",
+      "label": "Target",
+    },
+    {
+      "type": "link_list",
+      "id": "menu_nav2",
+      "label": "Menu"
+    },
+    {
+      "type": "header",
+      "content": "Sub Menu 3"
+    },
+    {
+      "type": "text",
+      "id": "menu_name3",
+      "label": "Target",
+    },
+    {
+      "type": "link_list",
+      "id": "menu_nav3",
+      "label": "Menu"
     },
     {
       "type": "color_scheme",

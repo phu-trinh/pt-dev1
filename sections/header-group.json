@@ -59,6 +59,12 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
+            "menu_name1": "Hydrogen",
+            "menu_nav1": "menu-connect",
+            "menu_name2": "",
+            "menu_nav2": "",
+            "menu_name3": "",
+            "menu_nav3": "",
             "color_scheme": "",
             "type_font_primary_size": "0.875rem",
             "menu_font_style": "inverse",
