@@ -541,7 +541,7 @@
           "type": "custom-liquid",
           "name": "t:names.custom_liquid",
           "settings": {
-            "custom_liquid": "<!-- Elfsight LinkedIn Feed | Untitled LinkedIn Feed -->\n<script src=\"https://elfsightcdn.com/platform.js\" async></script>\n<div class=\"elfsight-app-5dae78ce-4423-4196-bc69-5f1e7506213f\" data-elfsight-app-lazy></div>"
+            "custom_liquid": "<!-- Elfsight LinkedIn Feed | Untitled LinkedIn Feed -->\n<script src=\"https://elfsightcdn.com/platform.js\" async></script>\n<div class=\"elfsight-app-5410b84f-86b9-455d-99e7-5a6620d89c16\" data-elfsight-app-lazy></div>"
           },
           "blocks": {}
         }
